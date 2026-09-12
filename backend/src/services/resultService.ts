@@ -2,6 +2,7 @@ import Result from '../models/Result.js';
 import Subject from '../models/Subject.js';
 import Exam from '../models/Exam.js';
 import mongoose from 'mongoose';
+import { calculateCGPA } from './gradeCalculator.js';
 
 /**
  * Sync a single subject mark to the student's Result record
@@ -27,6 +28,7 @@ export const syncSingleResult = async ({
   const subjectResult = {
     subjectId,
     subjectName: subject?.name || 'Academic Coursework',
+    creditHours: subject?.creditHours ?? 1,
     marks: marksObtained,
     maxMarks,
     grade,
@@ -51,7 +53,12 @@ export const syncSingleResult = async ({
     existingResult.totalMarksObtained = (existingResult as any).subjects.reduce((sum: number, s: any) => sum + s.marks, 0);
     existingResult.totalMaxMarks = (existingResult as any).subjects.reduce((sum: number, s: any) => sum + s.maxMarks, 0);
     existingResult.percentage = (existingResult.totalMarksObtained / existingResult.totalMaxMarks) * 100;
-    existingResult.cgpa = existingResult.percentage / 10;
+    existingResult.cgpa = calculateCGPA(
+      (existingResult as any).subjects.map((s: any) => ({
+        gradePoint: s.gradePoint,
+        creditWeight: s.creditHours ?? 1,
+      }))
+    );
     existingResult.status = existingResult.subjects.every((s: any) => s.status === 'PASS') ? 'PASS' : 'FAIL';
     
     return await existingResult.save();
@@ -68,7 +75,9 @@ export const syncSingleResult = async ({
       totalMarksObtained: marksObtained,
       totalMaxMarks: maxMarks,
       percentage: (marksObtained / maxMarks) * 100,
-      cgpa: (marksObtained / maxMarks) * 10,
+      cgpa: calculateCGPA([
+        { gradePoint: subjectResult.gradePoint, creditWeight: subjectResult.creditHours },
+      ]),
       status: subjectResult.status as any,
       publishedDate: new Date(),
       publishedBy

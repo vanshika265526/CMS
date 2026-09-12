@@ -10,6 +10,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import CampusHero from "@/components/landing/CampusHero";
+import ModulesSection from "@/components/landing/ModulesSection";
 
 // ─────────────────────────────────────────
 // CSS
@@ -127,7 +129,7 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .m-av-circle{background:var(--blue);border-radius:50%;color:#fff;display:grid;flex-shrink:0;font-size:.62rem;font-weight:700;height:26px;place-items:center;width:26px}
 .m-av-info{font-size:.64rem;font-weight:500;line-height:1.4;color:var(--slate)}
 .m-av-info small{color:var(--green);display:block;font-size:.54rem;font-weight:600}
-.m-content{background:#F8FAFC;padding:1.3rem}
+.m-content{background:#F8FAFC;padding:1.3rem;display:flex;flex-direction:column}
 .m-header{align-items:flex-start;display:flex;justify-content:space-between;margin-bottom:.9rem}
 .m-role-label{color:var(--blue);font-size:.58rem;font-weight:700;letter-spacing:.1em;margin-bottom:.12rem;text-transform:uppercase}
 .m-title{color:var(--slate);font-size:.9rem;font-weight:700}
@@ -145,6 +147,15 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .m-card-sub.alert{color:#EF4444}
 .m-bottom{display:grid;gap:.6rem;grid-template-columns:1fr 1fr}
 .m-panel{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:.75rem}
+.m-analytics{display:grid;gap:.6rem;grid-template-columns:1.5fr 1fr;margin-top:.6rem;flex:1;min-height:120px}
+.m-chart-head{align-items:baseline;display:flex;justify-content:space-between;margin-bottom:.5rem}
+.m-chart-val{color:var(--blue);font-size:.62rem;font-weight:700}
+.m-chart-svg{display:block;height:calc(100% - 1.4rem);min-height:74px;width:100%}
+.m-feed{display:flex;flex-direction:column;gap:.42rem}
+.m-feed-row{align-items:flex-start;display:flex;gap:.42rem}
+.m-feed-dot{border-radius:50%;flex-shrink:0;height:6px;margin-top:.28rem;width:6px}
+.m-feed-txt{color:var(--slate-mid);font-size:.58rem;line-height:1.45}
+.m-feed-txt b{color:var(--slate);font-weight:600}
 .m-panel-title{color:var(--slate);font-size:.66rem;font-weight:600;margin-bottom:.35rem}
 .m-panel-empty{color:var(--slate-soft);font-size:.6rem;padding:.3rem 0}
 .m-action-card{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:10px;padding:.75rem}
@@ -263,6 +274,7 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 }
 @media(max-width:600px){
   .m-sidebar{display:none}
+  .m-analytics{grid-template-columns:1fr}
   .screen-inner{grid-template-columns:1fr}
   .features-grid{grid-template-columns:1fr 1fr}
   .feat-card{padding:1rem .85rem}
@@ -537,6 +549,48 @@ export const MockupSection: React.FC = () => {
                   <div className="m-action-btn">VERIFY INTERNAL 01</div>
                 </div>
               </div>
+              <div className="m-analytics">
+                <div className="m-panel">
+                  <div className="m-chart-head">
+                    <div className="m-panel-title">Attendance This Week</div>
+                    <div className="m-chart-val">94.2%</div>
+                  </div>
+                  <svg className="m-chart-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="mFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#2563EB" stopOpacity="0.22" />
+                        <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    {[15, 30, 45].map(y => (
+                      <line key={y} x1="0" x2="200" y1={y} y2={y} stroke="#E2E8F0" strokeWidth="1" />
+                    ))}
+                    <polygon points="0,42 33,34 66,37 100,22 133,27 166,14 200,18 200,60 0,60" fill="url(#mFill)" />
+                    <polyline points="0,42 33,34 66,37 100,22 133,27 166,14 200,18"
+                      fill="none" stroke="#2563EB" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round" />
+                    <polyline points="0,50 33,47 66,49 100,41 133,44 166,36 200,33"
+                      fill="none" stroke="#16A34A" strokeWidth="1.6"
+                      strokeLinecap="round" strokeLinejoin="round" opacity="0.75" />
+                  </svg>
+                </div>
+                <div className="m-panel">
+                  <div className="m-panel-title">Recent Activity</div>
+                  <div className="m-feed">
+                    {[
+                      { c: "#2563EB", t: "Internal 01 marks", s: "uploaded for CSE-A" },
+                      { c: "#16A34A", t: "12 fee receipts", s: "reconciled today" },
+                      { c: "#D97706", t: "Hostel gate pass", s: "awaiting approval" },
+                      { c: "#7C6AF5", t: "NAAC criterion 3", s: "evidence added" },
+                    ].map(f => (
+                      <div key={f.t} className="m-feed-row">
+                        <span className="m-feed-dot" style={{ background: f.c }} />
+                        <span className="m-feed-txt"><b>{f.t}</b> {f.s}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -764,7 +818,7 @@ export const FeaturesSection: React.FC = () => {
   ];
 
   return (
-    <section className="features-section" id="features">
+    <section className="features-section" id="capabilities">
       <div className="features-inner">
         <motion.div className="features-label"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
@@ -917,8 +971,8 @@ export const NgCMSStyles: React.FC = () => (
 const NgCMSLandingPage: React.FC = () => (
   <>
     <NgCMSStyles />
-    <Navbar />
-    <HeroSection />
+    <CampusHero />
+    <ModulesSection />
     <StatsBar />
     <MockupSection />
     <ChartsSection />

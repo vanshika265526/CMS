@@ -11,6 +11,13 @@ router.get("/", protect, examsController.getExams);
 router.get('/stats', protect, examsController.getExamStats);
 router.get("/results", protect, examsController.getResults);
 router.get("/reports/exam-analysis", protect, authorize("SUPER_ADMIN", "COLLEGE_ADMIN", "TEACHER"), examsController.generateExamAnalysis);
+// Declared before the :studentId/:examId pattern so "verify" is not swallowed by it.
+router.get(
+  "/hall-tickets/verify/:code",
+  protect,
+  authorize('SUPER_ADMIN', 'COLLEGE_ADMIN', 'ADMIN', 'TEACHER', 'FACULTY'),
+  examsController.verifyHallTicket
+);
 router.get("/hall-tickets/:studentId/:examId", protect, examsController.getHallTicket);
 router.get("/:examId/marks", protect, examsController.getMarks);
 router.get("/:examId", protect, examsController.getExamById);

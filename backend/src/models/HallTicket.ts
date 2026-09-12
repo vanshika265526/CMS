@@ -23,6 +23,7 @@ export interface IHallTicket extends Document {
     invigilator: string;
   };
   documentUrl?: string; // Cloudinary PDF URL
+  verificationCode: string; // Encoded in the QR code an invigilator scans
   status: 'GENERATED' | 'PUBLISHED' | 'DOWNLOADED';
   downloadedAt?: Date;
   downloadCount: number;
@@ -52,6 +53,7 @@ const HallTicketSchema: Schema = new Schema({
     invigilator: { type: String, required: true }
   },
   documentUrl: { type: String },
+  verificationCode: { type: String, index: true, sparse: true },
   status: { type: String, enum: ['GENERATED', 'PUBLISHED', 'DOWNLOADED'], default: 'GENERATED' },
   downloadedAt: { type: Date },
   downloadCount: { type: Number, default: 0 },

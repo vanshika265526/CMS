@@ -6,6 +6,8 @@ import HallTicket from "../models/HallTicket.js";
 import Student from "../models/Student.js";
 import Parent from "../models/Parent.js";
 import mongoose from "mongoose";
+import { randomBytes } from "crypto";
+import QRCode from "qrcode";
 import { emitToStudent, emitToBatch } from "../config/socket.js";
 import { calculateTotalMarks, calculateGrade, calculateCGPA } from "../services/gradeCalculator.js";
 import { syncSingleResult, syncBulkResults } from "../services/resultService.js";
@@ -402,7 +404,7 @@ export const publishResults = async (req: Request, res: Response) => {
 
     // 1. Get all marks for this exam and populate subjects
     const allMarks = await Marks.find({ examId })
-      .populate("subjectId", "name code")
+      .populate("subjectId", "name code creditHours")
       .populate("batchId", "name")
       .populate("courseId", "name")
       .session(session);
@@ -418,7 +420,7 @@ export const publishResults = async (req: Request, res: Response) => {
 
     // 3. Create results and hall tickets for each student
     const resultOps = [];
-    const hallTicketOps = [];
+    const hallTicketOps: any[] = [];
 
     for (const [studentId, marks] of studentMarksMap.entries()) {
       const student = await Student.findById(studentId)
@@ -429,11 +431,17 @@ export const publishResults = async (req: Request, res: Response) => {
       const totalObtained = marks.reduce((sum: number, m: any) => sum + m.totalMarks, 0);
       const totalPossible = marks.length * exam.totalMarks;
       const percentage = (totalObtained / totalPossible) * 100;
-      const cgpa = calculateCGPA(marks.map((m: any) => ({ gradePoint: m.gradePoint })));
+      const cgpa = calculateCGPA(
+        marks.map((m: any) => ({
+          gradePoint: m.gradePoint,
+          creditWeight: m.subjectId?.creditHours ?? 1,
+        }))
+      );
 
       const subjects = marks.map((m: any) => ({
         subjectId: m.subjectId._id,
         subjectName: m.subjectId.name,
+        creditHours: m.subjectId?.creditHours ?? 1,
         marks: m.totalMarks,
         maxMarks: exam.totalMarks,
         grade: m.grade,
@@ -471,6 +479,10 @@ export const publishResults = async (req: Request, res: Response) => {
         updateOne: {
           filter: { examId, studentId },
           update: {
+            // Keep the verification code stable if results are re-published,
+            // so QR codes already printed on issued tickets stay valid.
+            $setOnInsert: { verificationCode: randomBytes(16).toString('hex') },
+            $set: {
             examId,
             studentId,
             ticketNumber,
@@ -494,6 +506,7 @@ export const publishResults = async (req: Request, res: Response) => {
             },
             status: 'PUBLISHED',
             generatedAt: new Date()
+            }
           },
           upsert: true
         }
@@ -599,10 +612,66 @@ export const getHallTicket = async (req: Request, res: Response) => {
     const { studentId, examId } = req.params;
     const ticket = await HallTicket.findOne({ studentId, examId });
     if (!ticket) return res.status(404).json({ success: false, message: "Hall ticket not found" });
-    
-    res.status(200).json({ success: true, data: ticket });
+
+    // Backfill for tickets issued before QR verification existed.
+    if (!ticket.verificationCode) {
+      ticket.verificationCode = randomBytes(16).toString('hex');
+      await ticket.save();
+    }
+
+    const qrCodeDataUrl = await QRCode.toDataURL(ticket.verificationCode, {
+      errorCorrectionLevel: 'M',
+      margin: 1,
+      width: 240,
+    });
+
+    res.status(200).json({ success: true, data: { ...ticket.toObject(), qrCodeDataUrl } });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * Verify a hall ticket from its QR code. Used by invigilators at the hall door,
+ * so it returns only what is needed to match the person to the seat.
+ * GET /api/exams/hall-tickets/verify/:code
+ */
+export const verifyHallTicket = async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params;
+    if (!code || !/^[a-f0-9]{32}$/i.test(code)) {
+      return res.status(400).json({ success: false, valid: false, message: "Invalid QR code" });
+    }
+
+    const ticket = await HallTicket.findOne({ verificationCode: code }).lean();
+    if (!ticket) {
+      return res
+        .status(404)
+        .json({ success: true, valid: false, message: "No hall ticket matches this code" });
+    }
+
+    const examDate = new Date(ticket.examInfo.scheduleDate);
+    const today = new Date();
+    const isToday = examDate.toDateString() === today.toDateString();
+
+    res.status(200).json({
+      success: true,
+      valid: true,
+      data: {
+        ticketNumber: ticket.ticketNumber,
+        student: {
+          name: ticket.studentInfo.name,
+          rollNumber: ticket.studentInfo.rollNumber,
+          photo: ticket.studentInfo.photo,
+          course: ticket.studentInfo.course,
+          department: ticket.studentInfo.department,
+        },
+        exam: ticket.examInfo,
+        scheduledToday: isToday,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, valid: false, message: error.message });
   }
 };
 

@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface ISubjectResult {
   subjectId: mongoose.Types.ObjectId;
   subjectName: string;
+  creditHours: number;
   marks: number;
   maxMarks: number;
   grade: string;
@@ -40,6 +41,7 @@ const ResultSchema: Schema = new Schema({
   subjects: [{
     subjectId: { type: Schema.Types.ObjectId, ref: 'Subject', required: true },
     subjectName: { type: String, required: true },
+    creditHours: { type: Number, default: 1, min: 0 },
     marks: { type: Number, required: true },
     maxMarks: { type: Number, required: true },
     grade: { type: String, required: true },

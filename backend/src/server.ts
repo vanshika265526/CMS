@@ -36,6 +36,10 @@ import studentFeeRoutes from './routes/studentFeeRoutes.js';
 import placementRoutes from './routes/placementRoutes.js';
 import importRoutes from './routes/importRoutes.js';
 import trustedSourceRoutes from './routes/trustedSourceRoutes.js';
+import hostelRoutes from './routes/hostelRoutes.js';
+import supportRoutes from './routes/supportRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
+import assistantRoutes from './routes/assistantRoutes.js';
 import { sanitizeInput } from './middleware/sanitize.js';
 import { integrateMCPWithExpress } from './mcp/express.js';
 import { JobOrchestrator } from './services/queue/JobOrchestrator.js';
@@ -139,6 +143,10 @@ app.use('/api/student', studentFeeRoutes);
 app.use('/api/placements', placementRoutes);
 app.use('/api/imports', importRoutes);
 app.use('/api/trusted-sources', trustedSourceRoutes);
+app.use('/api/hostel', hostelRoutes);
+app.use('/api/support', supportRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/assistant', assistantRoutes);
 
 JobOrchestrator.initCron();
 
