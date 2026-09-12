@@ -1,23 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { 
-  Sparkles, 
-  Mail, 
-  Lock, 
-  Moon,
-  Sun,
-  Loader2, 
-  ChevronRight, 
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Mail,
+  Lock,
+  Loader2,
+  ChevronRight,
   AlertCircle,
   ShieldCheck,
-  KeyRound
+  KeyRound,
+  ArrowLeft,
 } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { z } from "zod";
 import api from "@/lib/api";
-import Card from "@/components/ui/Card";
+import CampusBackdrop from "@/components/landing/CampusBackdrop";
 
 // Validation Schema
 const loginSchema = z.object({
@@ -34,7 +33,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const stageRef = useRef<HTMLDivElement>(null);
 
   // OTP State
   const [challengeId, setChallengeId] = useState<string | null>(null);
@@ -42,14 +41,44 @@ export default function LoginPage() {
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>("05:00");
 
+  // The auth screens share the landing page's light-only treatment, so the
+  // portal's stored dark theme must not bleed into them.
   useEffect(() => {
-    const storedTheme = localStorage.getItem("portal_theme");
-    const systemPrefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = storedTheme === "dark" || storedTheme === "light"
-      ? (storedTheme as "light" | "dark")
-      : (systemPrefersDark ? "dark" : "light");
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle("theme-dark", initialTheme === "dark");
+    document.documentElement.classList.remove("theme-dark");
+  }, []);
+
+  // Entrance, mirroring the landing hero's staggered rise.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    let cancelled = false;
+    let clear: (() => void) | undefined;
+
+    (async () => {
+      const gsapMod = await import("gsap");
+      if (cancelled) return;
+      const gsap = gsapMod.gsap ?? gsapMod.default;
+      const items = stage.querySelectorAll("[data-stage-item]");
+      const reset = () => gsap.set(items, { clearProps: "opacity,transform" });
+      clear = reset;
+      gsap.from(items, {
+        y: 26,
+        opacity: 0,
+        duration: 0.85,
+        stagger: 0.09,
+        ease: "power3.out",
+        onComplete: reset,
+        onInterrupt: reset,
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      clear?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -69,13 +98,6 @@ export default function LoginPage() {
     }, 1000);
     return () => clearInterval(interval);
   }, [expiresAt]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("portal_theme", nextTheme);
-    document.documentElement.classList.toggle("theme-dark", nextTheme === "dark");
-  };
 
   const handleLoginSuccess = (data: any) => {
     localStorage.removeItem("portal_notice");
@@ -101,7 +123,7 @@ export default function LoginPage() {
     setError(null);
 
     const result = loginSchema.safeParse(formData);
-    
+
     if (!result.success) {
       setError(result.error.errors[0].message);
       setLoading(false);
@@ -152,119 +174,111 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 flex items-center justify-center p-6 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/50 via-slate-50 to-slate-50">
-      <button
-        type="button"
-        onClick={toggleTheme}
-        className="fixed top-4 right-4 z-40 w-10 h-10 rounded-xl bg-white/90 border border-slate-200 text-slate-700 shadow-lg hover:bg-white transition-all flex items-center justify-center"
-      >
-        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-      </button>
+    <div className="auth-page">
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <CampusBackdrop />
 
-      <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-        <div className="flex flex-col items-center mb-10 group">
-          <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-indigo-600/30 shadow-xl transition-all group-hover:scale-105 duration-500">
-            <Sparkles className="text-white" size={32} />
-          </div>
-          <h1 className="mt-8 text-3xl font-bold text-slate-900 tracking-tight">NgCMS ERP</h1>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">St. Xavier's Digital Curator</p>
-        </div>
+      <Link href="/" className="auth-back">
+        <ArrowLeft size={14} /> Back to site
+      </Link>
 
-        <Card className="p-10 bg-white shadow-xl shadow-slate-200/50 relative border-t-4 border-t-indigo-600 rounded-3xl border-slate-100 overflow-hidden">
-          
-          {/* OTP VIEW */}
+      <div className="auth-stage" ref={stageRef}>
+        <h1 className="auth-title" data-stage-item>
+          {challengeId ? "Verify it’s " : "Welcome "}
+          <span className="auth-title-accent">{challengeId ? "you" : "back"}</span>
+        </h1>
+
+        <p className="auth-sub" data-stage-item>
+          {challengeId
+            ? "Enter the 6-digit code from your authenticator or email to finish signing in."
+            : "Sign in to your institution’s campus operating system."}
+        </p>
+
+        <div className="auth-card" data-stage-item>
           {challengeId ? (
-             <form onSubmit={handleVerifyOtp} className="space-y-6 animate-in slide-in-from-right-8 duration-500">
-               <div className="text-center mb-6">
-                 <h2 className="text-lg font-bold text-slate-800">Two-Step Verification</h2>
-                 <p className="text-sm text-slate-500 mt-2">Enter the 6-digit security code generated by your authenticator or sent to your email.</p>
-               </div>
-
-               <div className="space-y-2">
-                 <div className="flex items-center justify-between pl-1 pr-1">
-                   <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Security Code</label>
-                   <span className="text-xs font-bold text-rose-500 font-mono tracking-widest">{timeLeft}</span>
-                 </div>
-                 <div className="relative group">
-                   <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                   <input 
-                     type="text" 
-                     maxLength={6}
-                     placeholder="000000"
-                     value={otp}
-                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                     className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all rounded-2xl pl-12 pr-4 py-3.5 text-center text-2xl tracking-[0.5em] font-mono outline-none text-slate-800 placeholder:text-slate-300 shadow-sm"
-                   />
-                 </div>
-               </div>
-
-               {error && (
-                 <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 animate-in shake duration-500">
-                   <AlertCircle className="text-rose-600 shrink-0" size={18} />
-                   <p className="text-xs font-bold text-rose-700 leading-tight">{error}</p>
-                 </div>
-               )}
-
-               <button 
-                 disabled={loading || timeLeft === "00:00"}
-                 className="w-full h-14 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-3 transition-all hover:bg-indigo-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 group"
-               >
-                 {loading ? (
-                   <Loader2 className="animate-spin text-white" size={20} />
-                 ) : (
-                   <>
-                     <span>Verify Identity</span>
-                     <ShieldCheck size={18} className="group-hover:scale-110 transition-transform" />
-                   </>
-                 )}
-               </button>
-
-               <button
-                 type="button"
-                 onClick={() => {
-                   setChallengeId(null);
-                   setOtp("");
-                   setError(null);
-                 }}
-                 className="w-full text-xs text-slate-500 hover:text-slate-800 font-bold uppercase tracking-wider transition-colors"
-               >
-                 Cancel & Return
-               </button>
-             </form>
-          ) : (
-             /* LOGIN VIEW */
-             <form onSubmit={handleSubmit} className="space-y-6 animate-in slide-in-from-left-8 duration-500">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider pl-1">Institutional Identifier (Email or ID)</label>
-                <div className="relative group">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                  <input 
-                    type="text" 
-                    placeholder="name@institution.edu or ID-2024001"
-                    value={formData.identifier}
-                    onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all rounded-2xl pl-12 pr-4 py-3.5 text-sm outline-none text-slate-800 placeholder:text-slate-400 shadow-sm"
+            /* OTP VIEW */
+            <form onSubmit={handleVerifyOtp} className="auth-form">
+              <div className="auth-field">
+                <div className="auth-label-row">
+                  <label className="auth-label">Security Code</label>
+                  <span className="auth-timer">{timeLeft}</span>
+                </div>
+                <div className="auth-input-wrap">
+                  <KeyRound className="auth-input-icon" size={18} />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    placeholder="000000"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    className="auth-input auth-input-otp"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between pl-1 pr-1">
-                  <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">Security Protocol</label>
+              {error && (
+                <div className="auth-error">
+                  <AlertCircle size={18} />
+                  <p>{error}</p>
                 </div>
-                <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
-                  <input 
+              )}
+
+              <button disabled={loading || timeLeft === "00:00"} className="auth-submit">
+                {loading ? (
+                  <Loader2 className="animate-spin" size={20} />
+                ) : (
+                  <>
+                    <span>Verify Identity</span>
+                    <ShieldCheck size={18} />
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setChallengeId(null);
+                  setOtp("");
+                  setError(null);
+                }}
+                className="auth-ghost"
+              >
+                Cancel &amp; Return
+              </button>
+            </form>
+          ) : (
+            /* LOGIN VIEW */
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="auth-field">
+                <label className="auth-label">Institutional Identifier</label>
+                <div className="auth-input-wrap">
+                  <Mail className="auth-input-icon" size={18} />
+                  <input
+                    type="text"
+                    placeholder="name@institution.edu or ID-2024001"
+                    value={formData.identifier}
+                    onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
+                    className="auth-input"
+                  />
+                </div>
+              </div>
+
+              <div className="auth-field">
+                <label className="auth-label">Password</label>
+                <div className="auth-input-wrap">
+                  <Lock className="auth-input-icon" size={18} />
+                  <input
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all rounded-2xl pl-12 pr-12 py-3.5 text-sm outline-none text-slate-800 placeholder:text-slate-400 shadow-sm"
+                    className="auth-input auth-input-pad"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-indigo-600"
+                    className="auth-reveal"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -273,43 +287,126 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 animate-in shake duration-500">
-                  <AlertCircle className="text-rose-600 shrink-0" size={18} />
-                  <p className="text-xs font-bold text-rose-700 leading-tight">{error}</p>
+                <div className="auth-error">
+                  <AlertCircle size={18} />
+                  <p>{error}</p>
                 </div>
               )}
 
-              <button 
-                disabled={loading}
-                className="w-full h-14 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-3 transition-all hover:bg-indigo-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 group"
-              >
+              <button disabled={loading} className="auth-submit">
                 {loading ? (
-                  <Loader2 className="animate-spin text-white" size={20} />
+                  <Loader2 className="animate-spin" size={20} />
                 ) : (
                   <>
-                    <span>Initialize Connection</span>
-                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    <span>Sign In</span>
+                    <ChevronRight size={18} />
                   </>
                 )}
               </button>
             </form>
           )}
 
-          <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col items-center gap-4">
-             <div className="flex items-center gap-2 text-indigo-600/60 bg-indigo-50 px-3 py-1.5 rounded-full">
-                <ShieldCheck size={14} />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Secure Connection Active</span>
-             </div>
-             <p className="text-[11px] text-slate-400 text-center font-medium leading-relaxed max-w-[280px]">
-               Access restricted to authorized personnel. Unauthenticated attempts are securely logged.
-             </p>
+          <div className="auth-foot">
+            <div className="auth-secure">
+              <ShieldCheck size={14} />
+              <span>Secure connection active</span>
+            </div>
+            <p className="auth-note">
+              Access is restricted to authorised personnel. Unauthenticated attempts are logged.
+            </p>
           </div>
-        </Card>
+        </div>
 
-        <p className="mt-8 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
-          NgCMS ERP v.1.0
-        </p>
+        <p className="auth-version" data-stage-item>NgCMS ERP v1.0</p>
       </div>
     </div>
   );
 }
+
+const CSS = `
+.auth-page{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:4.5rem 1.25rem 3rem;background:#F7F9FC;
+  font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+
+.auth-back{position:fixed;top:1.4rem;left:1.5rem;z-index:5;display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
+  border:1px solid rgba(17,24,39,.08);border-radius:999px;
+  padding:.5rem 1rem;font-size:.78rem;font-weight:650;color:#475467;text-decoration:none;
+  box-shadow:0 4px 16px rgba(17,24,39,.05);transition:.2s}
+.auth-back:hover{color:#111827;border-color:rgba(17,24,39,.2);transform:translateY(-1px)}
+
+.auth-stage{position:relative;z-index:2;width:100%;max-width:440px;text-align:center}
+
+.auth-title{margin:0;font-size:clamp(1.9rem,4.6vw,2.6rem);font-weight:800;
+  letter-spacing:-.035em;color:#111827;line-height:1.08}
+.auth-title-accent{background:linear-gradient(100deg,#2563EB 0%,#5B7CF5 40%,#8B5CF6 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+
+.auth-sub{margin:.75rem auto 0;max-width:340px;color:#475467;font-size:.9rem;line-height:1.65}
+
+.auth-card{margin-top:1.9rem;text-align:left;
+  background:linear-gradient(165deg,rgba(255,255,255,.94) 0%,rgba(247,250,255,.86) 100%);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  border:1px solid rgba(255,255,255,.9);border-radius:22px;padding:1.75rem;
+  box-shadow:0 -1px 0 rgba(255,255,255,.95) inset,
+             0 24px 70px rgba(15,35,80,.18),
+             0 6px 22px rgba(15,35,80,.08)}
+
+.auth-form{display:flex;flex-direction:column;gap:1.15rem}
+.auth-field{display:flex;flex-direction:column;gap:.5rem}
+.auth-label-row{display:flex;align-items:center;justify-content:space-between}
+.auth-label{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8A97AC}
+.auth-timer{font-size:.72rem;font-weight:700;color:#E11D48;font-variant-numeric:tabular-nums;letter-spacing:.1em}
+
+.auth-input-wrap{position:relative}
+.auth-input-icon{position:absolute;left:.95rem;top:50%;transform:translateY(-50%);color:#94A3B8;
+  pointer-events:none;transition:color .18s}
+.auth-input-wrap:focus-within .auth-input-icon{color:#2563EB}
+.auth-input{width:100%;background:rgba(255,255,255,.75);border:1px solid rgba(17,24,39,.1);
+  border-radius:14px;padding:.85rem 1rem .85rem 2.85rem;font-size:.9rem;color:#111827;
+  outline:none;transition:.18s;font-family:inherit}
+.auth-input::placeholder{color:#A9B4C4}
+.auth-input:focus{border-color:rgba(37,99,235,.5);box-shadow:0 0 0 4px rgba(37,99,235,.1);background:#fff}
+.auth-input-pad{padding-right:3rem}
+.auth-input-otp{text-align:center;font-size:1.45rem;letter-spacing:.45em;padding-left:2.85rem;
+  font-variant-numeric:tabular-nums}
+
+.auth-reveal{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:#94A3B8;padding:.4rem;display:flex;transition:color .18s}
+.auth-reveal:hover{color:#2563EB}
+
+.auth-error{display:flex;align-items:flex-start;gap:.65rem;background:rgba(225,29,72,.06);
+  border:1px solid rgba(225,29,72,.18);border-radius:14px;padding:.85rem 1rem;color:#B91C3C}
+.auth-error p{font-size:.8rem;font-weight:600;line-height:1.5;margin:0}
+
+.auth-submit{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;
+  height:3.1rem;border:none;cursor:pointer;border-radius:14px;
+  background:linear-gradient(135deg,#111827 0%,#1E2A44 100%);color:#fff;
+  font-family:inherit;font-size:.92rem;font-weight:700;letter-spacing:-.01em;
+  box-shadow:0 8px 24px rgba(17,24,39,.22);transition:.2s}
+.auth-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 12px 30px rgba(17,24,39,.28)}
+.auth-submit:disabled{opacity:.55;cursor:not-allowed}
+
+.auth-ghost{background:none;border:none;cursor:pointer;font-family:inherit;
+  font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#8A97AC;transition:color .18s;padding:.25rem}
+.auth-ghost:hover{color:#111827}
+
+.auth-foot{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(17,24,39,.07);
+  display:flex;flex-direction:column;align-items:center;gap:.7rem}
+.auth-secure{display:inline-flex;align-items:center;gap:.4rem;background:rgba(22,163,74,.08);
+  border:1px solid rgba(22,163,74,.16);border-radius:999px;padding:.3rem .8rem;
+  color:#16A34A;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.auth-note{margin:0;max-width:290px;text-align:center;color:#98A2B3;
+  font-size:.7rem;font-weight:500;line-height:1.6}
+
+.auth-version{margin-top:1.75rem;font-size:.64rem;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:#A9B4C4}
+
+@media (max-width:560px){
+  .auth-page{padding:4rem 1rem 2.5rem}
+  .auth-card{padding:1.35rem;border-radius:18px}
+  .auth-back{top:1rem;left:1rem;padding:.42rem .85rem;font-size:.72rem}
+}
+`;

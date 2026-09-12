@@ -331,13 +331,19 @@ export class CampusScene {
   private baseCameraY = 0.05;
   private baseCameraZ = 6.2;
 
+  private baseWorldY = 0;
+
   constructor(
     private canvas: HTMLCanvasElement,
     tier: keyof typeof QUALITY,
-    reducedMotion = false
+    reducedMotion = false,
+    // Sinks the whole scene so callers that aren't the hero can keep the
+    // horizon as a quiet band rather than letting it fill the frame.
+    worldOffsetY = 0
   ) {
     this.quality = QUALITY[tier];
     this.reducedMotion = reducedMotion;
+    this.baseWorldY = worldOffsetY;
 
     this.renderer = new THREE.WebGLRenderer({
       canvas,
@@ -358,6 +364,7 @@ export class CampusScene {
     this.camera.lookAt(0, -0.4, 0);
 
     this.scene.add(this.world);
+    this.world.position.y = this.baseWorldY;
 
     this.buildPlanet();
     this.buildAtmosphere();
@@ -687,7 +694,7 @@ export class CampusScene {
 
     // The world itself also drifts upward, so the horizon exits the frame
     // rather than the whole hero simply fading out.
-    this.world.position.y = climb * 0.9;
+    this.world.position.y = this.baseWorldY + climb * 0.9;
 
     // Gentle idle drift keeps the scene alive when the user is not scrolling.
     if (!this.reducedMotion) {

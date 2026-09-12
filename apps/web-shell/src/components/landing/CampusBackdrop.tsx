@@ -25,7 +25,7 @@ export default function CampusBackdrop({ className = "" }: { className?: string 
 
     let scene: CampusScene;
     try {
-      scene = new CampusScene(canvas, tierFor(window.innerWidth), reduced);
+      scene = new CampusScene(canvas, tierFor(window.innerWidth), reduced, -2.4);
     } catch {
       // No WebGL — the CSS gradient underneath carries the page on its own.
       return;
@@ -91,10 +91,12 @@ const CSS = `
 .cb-canvas.is-ready{opacity:1}
 /* Keeps foreground copy legible over the brightest part of the scene */
 .cb-veil{position:absolute;inset:0;
-  background:linear-gradient(180deg,
-    rgba(247,249,252,.92) 0%,
-    rgba(247,249,252,.62) 26%,
-    rgba(247,249,252,.12) 48%,
-    rgba(247,249,252,0) 64%)}
+  background:
+    radial-gradient(62% 48% at 50% 46%, rgba(247,249,252,.93) 0%, rgba(247,249,252,.62) 55%, rgba(247,249,252,0) 100%),
+    linear-gradient(180deg,
+      rgba(247,249,252,.90) 0%,
+      rgba(247,249,252,.66) 28%,
+      rgba(247,249,252,.42) 55%,
+      rgba(247,249,252,.30) 100%)}
 @media (prefers-reduced-motion:reduce){.cb-canvas{transition:none}}
 `;
