@@ -17,7 +17,8 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
       token = req.headers.authorization.split(' ')[1];
       req.token = token;
       console.log(`[AUTH] Token extracted: ${token.substring(0, 10)}...`);
-      const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      const jwtSecret = process.env.JWT_SECRET || 'ngcms_default_fallback_dev_secret_key_2026';
+      const decoded: any = jwt.verify(token, jwtSecret);
       console.log(`[AUTH] Token decoded successfully. ID: ${decoded.id}`);
 
       const normalizedTokenRole = String(decoded.role || '').toUpperCase();
@@ -81,17 +82,17 @@ export const authorize = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     const userRole = req.user?.role?.toString().trim().toUpperCase();
     const requiredRoles = roles.map(r => r.trim().toUpperCase());
-    
+
     console.log(`[AUTH] Path: ${req.method} ${req.originalUrl}`);
     console.log(`[AUTH] Required: ${JSON.stringify(requiredRoles)}, User: "${userRole}"`);
-    
+
     if (req.user && requiredRoles.includes(userRole)) {
       next();
     } else {
       console.warn(`[AUTH] Forbidden: "${userRole}" matches none of ${JSON.stringify(requiredRoles)}`);
-      res.status(403).json({ 
-        success: false, 
-        message: `Role ${userRole} is not authorized. Required: ${requiredRoles.join(", ")}` 
+      res.status(403).json({
+        success: false,
+        message: `Role ${userRole} is not authorized. Required: ${requiredRoles.join(", ")}`
       });
     }
   };

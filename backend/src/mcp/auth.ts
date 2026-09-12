@@ -76,7 +76,7 @@ export async function resolveAuthContext(req: Request, source: string): Promise<
       const key: any = await ApiKey.findOne({ key_hash: sha256(token), active: true });
       if (!key) return anonymous;
       if (key.expiresAt && key.expiresAt.getTime() < Date.now()) return anonymous;
-      ApiKey.updateOne({ _id: key._id }, { $set: { last_used_at: new Date() } }).catch(() => {});
+      ApiKey.updateOne({ _id: key._id }, { $set: { last_used_at: new Date() } }).catch(() => { });
       const user = key.userId ? await User.findById(key.userId).select('-password').lean() : null;
       return {
         user,
@@ -95,7 +95,8 @@ export async function resolveAuthContext(req: Request, source: string): Promise<
 
   // 3 & 4) JWT — either an OAuth access token or a legacy login token.
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    const jwtSecret = process.env.JWT_SECRET || 'ngcms_default_fallback_dev_secret_key_2026';
+    const decoded: any = jwt.verify(token, jwtSecret);
 
     // 3) OAuth 2.1 access token.
     if (decoded?.type === 'mcp_access') {
@@ -131,7 +132,7 @@ export async function resolveAuthContext(req: Request, source: string): Promise<
     const user = await User.findById(decoded.id).select('-password').lean();
     if (!user) return anonymous;
 
-    Session.updateOne({ _id: activeSession._id }, { $set: { last_activity: new Date() } }).catch(() => {});
+    Session.updateOne({ _id: activeSession._id }, { $set: { last_activity: new Date() } }).catch(() => { });
     return {
       user,
       role: String((user as any).role || '').toUpperCase(),
@@ -158,7 +159,8 @@ export function createAuthMiddleware() {
     if (token === expected) return next();
     if (token) {
       try {
-        jwt.verify(token, process.env.JWT_SECRET || 'secret');
+        const jwtSecret = process.env.JWT_SECRET || 'ngcms_default_fallback_dev_secret_key_2026';
+        jwt.verify(token, jwtSecret);
         return next();
       } catch { /* fall through */ }
     }
