@@ -62,7 +62,6 @@ export default function CampusHero() {
       const gsap = gsapMod.gsap ?? gsapMod.default;
       const ScrollTrigger = stMod.ScrollTrigger ?? stMod.default;
       gsap.registerPlugin(ScrollTrigger);
-      (window as any).__dbg = { gsap, ScrollTrigger, scene };
 
       const heroItems = contentRef.current
         ? Array.from(contentRef.current.querySelectorAll("[data-hero-item]"))
@@ -178,9 +177,10 @@ export default function CampusHero() {
       };
 
       // Three phases across the pinned hero, as one continuous move:
-      //   0.00–0.32  headline clears while the dashboard rises into full view
-      //   0.32–0.55  the whole panel sits on screen
-      //   0.55–0.90  panel and scene exit upward as the next section arrives
+      //   0.00–0.32  headline clears while the preview rises into full view
+      //   0.32–0.60  the whole preview sits on screen
+      //   0.60–0.96  preview exits upward while the next section slides over it,
+      //              so the pinned frame is never left empty
       const contentTl = gsap.timeline({
         scrollTrigger: {
           trigger: wrap,
@@ -211,9 +211,9 @@ export default function CampusHero() {
             opacity: 0,
             scale: 0.95,
             ease: "power1.in",
-            duration: 0.35,
+            duration: 0.36,
           },
-          0.55
+          0.58
         );
       }
       // Pad the timeline to a full unit so the positions above map directly
@@ -340,7 +340,7 @@ export default function CampusHero() {
 }
 
 const CSS = `
-.ch-wrap{position:relative;height:200vh;background:#F7F9FC}
+.ch-wrap{position:relative;height:250vh;background:#F7F9FC}
 .ch-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
   display:flex;flex-direction:column;align-items:center}
 
@@ -476,7 +476,7 @@ const CSS = `
   .ch-nav-links{display:none}
 }
 @media (max-width:860px){
-  .ch-wrap{height:185vh}
+  .ch-wrap{height:215vh}
   .ch-nav{padding:1.1rem 1.15rem 0}
   .ch-brand-sub{display:none}
   .ch-btn-ghost{display:none}

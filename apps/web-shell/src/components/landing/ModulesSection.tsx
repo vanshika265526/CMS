@@ -160,8 +160,8 @@ const CSS = `
     #F7F9FC;
   /* Rides up over the tail of the pinned hero so the 3D scene hands off to
      this section continuously instead of leaving a blank pinned frame. */
-  margin-top:-38vh;
-  padding:clamp(3.5rem,9vw,7rem) 1.5rem clamp(4rem,9vw,7rem);overflow:hidden}
+  margin-top:-68vh;
+  padding:clamp(3.5rem,9vw,7rem) 1.5rem clamp(2rem,4vw,3.25rem);overflow:hidden}
 
 /* Soft glow bleeding down from the hero so there is no visible seam */
 .mod-bleed{position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -172,7 +172,7 @@ const CSS = `
     radial-gradient(38% 45% at 50% 48%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 70%);
   filter:blur(22px)}
 
-.mod-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
+.mod-inner{position:relative;z-index:1;max-width:1320px;margin:0 auto}
 
 .mod-head{text-align:center;max-width:660px;margin:0 auto clamp(2.5rem,5vw,3.8rem)}
 .mod-eyebrow{display:inline-flex;align-items:center;gap:.45rem;

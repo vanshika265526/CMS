@@ -152,8 +152,8 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .m-action-btn{background:var(--blue);border-radius:5px;color:#fff;display:inline-block;font-size:.56rem;font-weight:600;margin-top:.45rem;padding:.22rem .6rem}
 
 /* ── Charts Section ── */
-.charts-section{background:var(--white);padding:6rem 5%}
-.charts-inner{margin:0 auto;max-width:1100px}
+.charts-section{background:var(--white);padding:3rem clamp(1.25rem,3.5vw,3rem) 6rem}
+.charts-inner{margin:0 auto;max-width:1320px}
 .charts-label{margin-bottom:3rem}
 .charts-grid{display:grid;gap:1.4rem;grid-template-columns:1.5fr 1fr 1fr}
 .chart-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.5rem}
@@ -189,8 +189,8 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 @media(max-width:600px){.charts-grid{grid-template-columns:1fr}}
 
 /* ── Features ── */
-.features-section{background:var(--white);padding:6rem 5%}
-.features-inner{margin:0 auto;max-width:1100px}
+.features-section{background:var(--white);padding:6rem clamp(1.25rem,3.5vw,3rem)}
+.features-inner{margin:0 auto;max-width:1320px}
 .features-label{margin-bottom:3rem}
 .features-grid{display:grid;gap:1.2rem;grid-template-columns:repeat(3,1fr)}
 .feat-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.8rem;position:relative;transition:border-color .22s,box-shadow .22s,transform .22s;overflow:hidden}
@@ -203,8 +203,8 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .feat-desc{color:var(--slate-soft);font-size:.875rem;line-height:1.7}
 
 /* ── Roles ── */
-.roles-section{background:var(--bg);padding:6rem 5%}
-.roles-inner{margin:0 auto;max-width:1100px}
+.roles-section{background:var(--bg);padding:6rem clamp(1.25rem,3.5vw,3rem)}
+.roles-inner{margin:0 auto;max-width:1320px}
 .roles-tabs{display:flex;flex-wrap:wrap;gap:.7rem;margin:2.5rem 0}
 .role-tab{align-items:center;background:var(--white);border:1.5px solid var(--border);border-radius:50px;color:var(--slate-soft);cursor:pointer;display:flex;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:600;gap:.5rem;padding:.55rem 1.3rem;transition:all .22s}
 .role-tab:hover{border-color:var(--blue);color:var(--blue)}
@@ -237,16 +237,38 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .cta-ghost:hover{border-color:#fff}
 
 /* ── Footer ── */
-.footer{background:var(--white);border-top:1px solid var(--border);padding:2rem 5%}
-.footer-inner{align-items:center;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;margin:0 auto;max-width:1200px}
-.footer-brand{align-items:center;display:flex;gap:.65rem}
-.footer-name{font-size:.9rem;font-weight:700;color:var(--slate)}
+.footer{background:var(--white);border-top:1px solid var(--border);padding:3.5rem clamp(1.25rem,3.5vw,3rem) 0}
+.footer-inner{margin:0 auto;max-width:1320px}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:2.5rem;padding-bottom:2.75rem}
+.footer-brand{align-items:center;display:flex;gap:.65rem;margin-bottom:1rem}
+.footer-name{font-size:1rem;font-weight:700;color:var(--slate);line-height:1.2}
 .footer-name span{color:var(--blue)}
-.footer-tagline{color:var(--slate-soft);font-size:.72rem}
+.footer-tagline{color:var(--slate-soft);font-size:.72rem;letter-spacing:.04em}
+.footer-about{color:var(--slate-soft);font-size:.82rem;line-height:1.7;max-width:330px;margin-bottom:1.25rem}
+.footer-badges{display:flex;flex-wrap:wrap;gap:.45rem}
+.footer-badge{align-items:center;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:50px;
+  color:var(--blue);display:inline-flex;font-size:.66rem;font-weight:700;gap:.3rem;letter-spacing:.05em;
+  padding:.28rem .7rem;text-transform:uppercase}
+.footer-col-title{color:var(--slate);font-size:.72rem;font-weight:700;letter-spacing:.12em;
+  margin-bottom:1rem;text-transform:uppercase}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-col a{color:var(--slate-soft);font-size:.84rem;font-weight:500;text-decoration:none;transition:color .2s}
+.footer-col a:hover{color:var(--blue)}
+.footer-bottom{align-items:center;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;
+  gap:1rem;justify-content:space-between;padding:1.4rem 0 1.6rem}
 .footer-copy{color:var(--slate-soft);font-size:.78rem}
-.footer-links{display:flex;gap:1.5rem}
+.footer-links{display:flex;flex-wrap:wrap;gap:1.5rem}
 .footer-links a{color:var(--slate-soft);font-size:.78rem;font-weight:500;text-decoration:none;transition:color .2s}
 .footer-links a:hover{color:var(--blue)}
+@media (max-width:900px){
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem}
+  .footer-about{max-width:none}
+}
+@media (max-width:560px){
+  .footer{padding-top:2.5rem}
+  .footer-top{grid-template-columns:1fr;gap:1.75rem}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:.75rem}
+}
 
 /* ── Scroll reveal hint ── */
 .hero-scroll-hint{align-items:center;bottom:2.5rem;color:var(--slate-soft);display:flex;flex-direction:column;font-size:.68rem;font-weight:500;gap:.4rem;left:50%;letter-spacing:.1em;position:absolute;transform:translateX(-50%);z-index:1;text-transform:uppercase}
@@ -790,19 +812,80 @@ export const CTASection: React.FC = () => (
 // ─────────────────────────────────────────
 // Footer
 // ─────────────────────────────────────────
+const FOOTER_COLUMNS = [
+  {
+    title: "Platform",
+    links: [
+      { label: "Modules", href: "#features" },
+      { label: "Analytics", href: "#analytics" },
+      { label: "Role Portals", href: "#roles" },
+      { label: "Capabilities", href: "#capabilities" },
+    ],
+  },
+  {
+    title: "Modules",
+    links: [
+      { label: "Admissions", href: "#features" },
+      { label: "Attendance", href: "#features" },
+      { label: "Examinations", href: "#features" },
+      { label: "Fees & Finance", href: "#features" },
+      { label: "Hostel & Library", href: "#features" },
+    ],
+  },
+  {
+    title: "Get Started",
+    links: [
+      { label: "Sign In", href: "/login" },
+      { label: "Request a Demo", href: "#login" },
+      { label: "Support", href: "#login" },
+    ],
+  },
+];
+
 export const Footer: React.FC = () => (
   <footer className="footer">
     <div className="footer-inner">
-      <div className="footer-brand">
-        <div className="nav-logo-icon" style={{ width: 28, height: 28, fontSize: ".85rem" }}>✦</div>
+      <div className="footer-top">
         <div>
-          <div className="footer-name">NgCMS <span>ERP</span></div>
-          <div className="footer-tagline">by Avani Enterprises</div>
+          <div className="footer-brand">
+            <div className="nav-logo-icon" style={{ width: 32, height: 32, fontSize: ".9rem" }}>✦</div>
+            <div>
+              <div className="footer-name">NgCMS <span>ERP</span></div>
+              <div className="footer-tagline">by Avani Enterprises</div>
+            </div>
+          </div>
+          <p className="footer-about">
+            The intelligent campus operating system — one connected platform covering admissions,
+            academics, finance and campus life for modern higher education institutions.
+          </p>
+          <div className="footer-badges">
+            <span className="footer-badge">NAAC Ready</span>
+            <span className="footer-badge">99% Uptime SLA</span>
+            <span className="footer-badge">Role-Based Access</span>
+          </div>
         </div>
+
+        {FOOTER_COLUMNS.map((col) => (
+          <div className="footer-col" key={col.title}>
+            <div className="footer-col-title">{col.title}</div>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <div className="footer-copy">© 2026 NgCMS ERP. All rights reserved.</div>
-      <div className="footer-links">
-        {["Privacy", "Terms", "Support"].map(l => <a key={l} href="#">{l}</a>)}
+
+      <div className="footer-bottom">
+        <div className="footer-copy">© 2026 Avani Enterprises. All rights reserved.</div>
+        <div className="footer-links">
+          {["Privacy", "Terms", "Security"].map((l) => (
+            <a key={l} href="#">{l}</a>
+          ))}
+        </div>
       </div>
     </div>
   </footer>
