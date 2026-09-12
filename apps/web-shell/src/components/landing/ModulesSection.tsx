@@ -160,7 +160,7 @@ const CSS = `
     #F7F9FC;
   /* Rides up over the tail of the pinned hero so the 3D scene hands off to
      this section continuously instead of leaving a blank pinned frame. */
-  margin-top:-45vh;
+  margin-top:-38vh;
   padding:clamp(3.5rem,9vw,7rem) 1.5rem clamp(4rem,9vw,7rem);overflow:hidden}
 
 /* Soft glow bleeding down from the hero so there is no visible seam */

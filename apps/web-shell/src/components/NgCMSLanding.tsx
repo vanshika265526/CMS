@@ -33,18 +33,10 @@ const GLOBAL_CSS = `
   --nav-bg:rgba(248,250,252,0.92);
   --hero-bg:linear-gradient(160deg, #EFF6FF 0%, #F8FAFC 50%, #F0FDF4 100%);
 }
-html.theme-dark {
-  --blue:#3B82F6;--blue-light:rgba(59,130,246,0.15);--blue-mid:rgba(59,130,246,0.25);--blue-dark:#60A5FA;
-  --green:#22C55E;--green-light:rgba(34,197,94,0.15);
-  --amber:#F59E0B;--amber-light:rgba(245,158,11,0.15);
-  --slate:#F1F5F9;--slate-mid:#94A3B8;--slate-soft:#94A3B8;
-  --border:#1E293B;--bg:#020617;--white:#0F172A;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.3);
-  --shadow-md:0 4px 16px rgba(0,0,0,.4);
-  --shadow-lg:0 20px 48px rgba(0,0,0,.5);
-  --nav-bg:rgba(15,23,42,0.92);
-  --hero-bg:linear-gradient(160deg, #0f172a 0%, #020617 50%, #064e3b 100%);
-}
+/* The landing page is a light-theme marketing surface: the 3D hero is
+   light-only by design, so the portal's stored dark theme must not leak in
+   and flip these variables (it turned the Live Preview mockup navy). */
+
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
 
@@ -107,10 +99,6 @@ body{background:var(--bg);color:var(--slate);font-family:'Plus Jakarta Sans',san
 .section-title .accent{color:var(--blue)}
 
 /* ── Mockup ── */
-.mockup-section{background:var(--bg);padding:6rem 5%}
-.mockup-inner{margin:0 auto;max-width:1200px}
-.mockup-label{margin-bottom:3rem}
-.mockup-wrapper{border-radius:var(--radius-lg);box-shadow:var(--shadow-lg),0 0 0 1px var(--border);overflow:hidden}
 .screen-wrap{background:#F1F5F9;border-radius:var(--radius-lg);overflow:hidden}
 .screen-bar{align-items:center;background:var(--white);border-bottom:1px solid var(--border);display:flex;gap:.5rem;padding:.65rem 1rem}
 .screen-dot{border-radius:50%;height:10px;width:10px}
@@ -461,144 +449,6 @@ export const StatsBar: React.FC = () => (
     </div>
   </div>
 );
-
-// ─────────────────────────────────────────
-// Mockup Section
-// ─────────────────────────────────────────
-export const MockupSection: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.4, 1], [10, 0, -4]);
-  const scale = useTransform(scrollYProgress, [0, 0.25], [0.92, 1]);
-
-  const cards = [
-    { label: "Total Students", num: "60", sub: "↑ Active Roll", cls: "" },
-    { label: "Pending Admissions", num: "4", sub: "Awaiting Approval", cls: "grey" },
-    { label: "Shortage Alerts", num: "3", sub: "Below 75%", cls: "alert" },
-    { label: "Fee Defaulters", num: "2", sub: "Overdue This Month", cls: "grey" },
-  ];
-
-  return (
-    <div ref={ref} className="mockup-section">
-      <div className="mockup-inner">
-        <div className="mockup-label">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="section-tag">Live Preview</div>
-            <h2 className="section-title">See it in <span className="accent">action</span></h2>
-          </motion.div>
-        </div>
-        <motion.div className="mockup-wrapper" style={{ y, rotateX, scale, transformPerspective: 1400 }}>
-        <div className="screen-wrap">
-          <div className="screen-bar">
-            <div className="screen-dot d1" /><div className="screen-dot d2" /><div className="screen-dot d3" />
-            <div className="screen-url">ngcms.xaviers.edu/dashboard</div>
-          </div>
-          <div className="screen-inner">
-            {/* Sidebar */}
-            <div className="m-sidebar">
-              <div className="m-brand">NgCMS ERP<small>AI POWERED ERP</small></div>
-              {["Dashboard", "Students", "Admissions"].map(item => (
-                <div key={item} className={`m-item${item === "Dashboard" ? " active" : ""}`}>
-                  <div className="m-item-icon" />{item}
-                </div>
-              ))}
-              <div className="m-section">ACADEMIC HUB</div>
-              {["Academics", "Attendance", "Exams", "Fees"].map(item => (
-                <div key={item} className="m-item"><div className="m-item-icon" />{item}</div>
-              ))}
-              <div className="m-section">CAMPUS</div>
-              {["Library", "Placements", "NAAC"].map(item => (
-                <div key={item} className="m-item"><div className="m-item-icon" />{item}</div>
-              ))}
-              <div className="m-avatar">
-                <div className="m-av-circle">P</div>
-                <div className="m-av-info">Prof. Alan Turing<small>Teacher ●</small></div>
-              </div>
-            </div>
-            {/* Content */}
-            <div className="m-content">
-              <div className="m-header">
-                <div>
-                  <div className="m-role-label">TEACHER</div>
-                  <div className="m-title">PORTAL <span>OVERVIEW</span></div>
-                  <div className="m-subtitle">Spring Semester 2024</div>
-                </div>
-                <div className="m-date">MONDAY<br />APRIL 6, 2026</div>
-              </div>
-              <div className="m-cards">
-                {cards.map((c, i) => (
-                  <motion.div key={i} className="m-card"
-                    initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ delay: 0.3 + 0.08 * i }}>
-                    <div className={`m-card-ico${c.cls === "alert" ? " red" : ""}`} />
-                    <div className="m-card-label">{c.label}</div>
-                    <div className="m-card-num">{c.num}</div>
-                    <div className={`m-card-sub ${c.cls}`}>{c.sub}</div>
-                  </motion.div>
-                ))}
-              </div>
-              <div className="m-bottom">
-                <div className="m-panel">
-                  <div className="m-panel-title">Immediate Schedule</div>
-                  <div className="m-panel-empty">No classes for remainder of today.</div>
-                </div>
-                <div className="m-action-card">
-                  <div className="m-action-title">Publish Results</div>
-                  <div className="m-action-desc">Admin reviewed Mark Records for Spring Internal. Ready for portal publishing?</div>
-                  <div className="m-action-btn">VERIFY INTERNAL 01</div>
-                </div>
-              </div>
-              <div className="m-analytics">
-                <div className="m-panel">
-                  <div className="m-chart-head">
-                    <div className="m-panel-title">Attendance This Week</div>
-                    <div className="m-chart-val">94.2%</div>
-                  </div>
-                  <svg className="m-chart-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="mFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#2563EB" stopOpacity="0.22" />
-                        <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    {[15, 30, 45].map(y => (
-                      <line key={y} x1="0" x2="200" y1={y} y2={y} stroke="#E2E8F0" strokeWidth="1" />
-                    ))}
-                    <polygon points="0,42 33,34 66,37 100,22 133,27 166,14 200,18 200,60 0,60" fill="url(#mFill)" />
-                    <polyline points="0,42 33,34 66,37 100,22 133,27 166,14 200,18"
-                      fill="none" stroke="#2563EB" strokeWidth="2"
-                      strokeLinecap="round" strokeLinejoin="round" />
-                    <polyline points="0,50 33,47 66,49 100,41 133,44 166,36 200,33"
-                      fill="none" stroke="#16A34A" strokeWidth="1.6"
-                      strokeLinecap="round" strokeLinejoin="round" opacity="0.75" />
-                  </svg>
-                </div>
-                <div className="m-panel">
-                  <div className="m-panel-title">Recent Activity</div>
-                  <div className="m-feed">
-                    {[
-                      { c: "#2563EB", t: "Internal 01 marks", s: "uploaded for CSE-A" },
-                      { c: "#16A34A", t: "12 fee receipts", s: "reconciled today" },
-                      { c: "#D97706", t: "Hostel gate pass", s: "awaiting approval" },
-                      { c: "#7C6AF5", t: "NAAC criterion 3", s: "evidence added" },
-                    ].map(f => (
-                      <div key={f.t} className="m-feed-row">
-                        <span className="m-feed-dot" style={{ background: f.c }} />
-                        <span className="m-feed-txt"><b>{f.t}</b> {f.s}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-      </div>
-    </div>
-  );
-};
 
 // ─────────────────────────────────────────
 // Attendance Bar Chart
@@ -974,7 +824,6 @@ const NgCMSLandingPage: React.FC = () => (
     <CampusHero />
     <ModulesSection />
     <StatsBar />
-    <MockupSection />
     <ChartsSection />
     <FeaturesSection />
     <RolesSection />

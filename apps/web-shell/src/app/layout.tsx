@@ -58,8 +58,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const storedTheme = localStorage.getItem("portal_theme");
     const initialTheme = storedTheme === "dark" ? "dark" : "light";
     setTheme(initialTheme);
-    document.documentElement.classList.toggle("theme-dark", initialTheme === "dark");
-  }, []);
+    // The public landing page is a light-only marketing surface. Letting the
+    // portal's stored dark theme apply there flipped the Live Preview mockup
+    // to navy and left light text sitting on white cards.
+    const onPublicLanding = pathname === "/" && !localStorage.getItem("token");
+    document.documentElement.classList.toggle(
+      "theme-dark",
+      initialTheme === "dark" && !onPublicLanding
+    );
+  }, [pathname]);
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark";

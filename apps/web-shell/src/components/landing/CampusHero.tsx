@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { CampusScene, QUALITY } from "./campusScene";
+import CampusPreview from "./CampusPreview";
 
 const NAV = [
   { label: "Features", href: "#features" },
@@ -61,6 +62,7 @@ export default function CampusHero() {
       const gsap = gsapMod.gsap ?? gsapMod.default;
       const ScrollTrigger = stMod.ScrollTrigger ?? stMod.default;
       gsap.registerPlugin(ScrollTrigger);
+      (window as any).__dbg = { gsap, ScrollTrigger, scene };
 
       const heroItems = contentRef.current
         ? Array.from(contentRef.current.querySelectorAll("[data-hero-item]"))
@@ -73,6 +75,10 @@ export default function CampusHero() {
       clearIntroProps = () => {
         if (heroItems.length) gsap.set(heroItems, { clearProps: "opacity,transform" });
         if (dash) gsap.set(dash, { clearProps: "opacity,transform" });
+        // The scroll tweens resolve their distances from layout once. Re-measure
+        // after the entrance settles so the panel's travel is based on its real
+        // resting position rather than a mid-animation one.
+        ScrollTrigger.refresh();
       };
 
       // ---- Entrance -------------------------------------------------
@@ -144,18 +150,31 @@ export default function CampusHero() {
         onUpdate: (self: any) => scene.setScroll(self.progress),
       });
 
+      // Layout offset of an element inside an ancestor. offsetTop/offsetHeight
+      // ignore transforms, so this stays correct even while the entrance
+      // animation still has the panel translated.
+      const offsetWithin = (el: HTMLElement, ancestor: HTMLElement) => {
+        let y = 0;
+        let node: HTMLElement | null = el;
+        while (node && node !== ancestor) {
+          y += node.offsetTop;
+          node = node.offsetParent as HTMLElement | null;
+        }
+        return y;
+      };
+
       // How far the panel must rise for its whole height to clear the fold.
-      // Measured live (minus any transform already applied) so it stays correct
-      // across viewport sizes, and clamped so the panel never tucks under the nav.
+      // GSAP resolves function-based values once, so this must not depend on
+      // whatever transform happens to be applied at that moment.
       const dashLift = () => {
         const sticky = stickyRef.current;
         if (!dash || !sticky) return 0;
-        const currentY = Number(gsap.getProperty(dash, "y")) || 0;
-        const d = dash.getBoundingClientRect();
-        const restingTop = d.top - currentY;
-        const hiddenBelowFold = restingTop + d.height - sticky.getBoundingClientRect().bottom;
-        const maxLift = restingTop - 96;
-        return Math.max(0, Math.min(hiddenBelowFold + 28, maxLift));
+        const restingTop = offsetWithin(dash, sticky);
+        const hiddenBelowFold = restingTop + dash.offsetHeight - sticky.offsetHeight;
+        // Clearance kept below the nav; tighter on short laptop screens so the
+        // preview can still clear the fold completely.
+        const clearance = window.innerHeight < 780 ? 74 : 96;
+        return Math.max(0, Math.min(hiddenBelowFold + 28, restingTop - clearance));
       };
 
       // Three phases across the pinned hero, as one continuous move:
@@ -311,47 +330,7 @@ export default function CampusHero() {
 
         <div className="ch-dash-holder">
           <div className="ch-dash" ref={dashRef}>
-            <div className="ch-dash-head">
-              <div>
-                <p className="ch-dash-brand">NgCMS ERP</p>
-                <p className="ch-dash-title">Campus Intelligence</p>
-              </div>
-              <div className="ch-dash-live">
-                <span className="ch-dot" /> Live
-              </div>
-            </div>
-
-            <div className="ch-dash-stats">
-              {[
-                { v: "24,892", l: "Students", t: "blue" },
-                { v: "94.2%", l: "Attendance", t: "green" },
-                { v: "1,284", l: "Faculty", t: "violet" },
-                { v: "126", l: "Active Events", t: "amber" },
-              ].map((s) => (
-                <div key={s.l} className={`ch-stat ch-stat-${s.t}`}>
-                  <p className="ch-stat-v">{s.v}</p>
-                  <p className="ch-stat-l">{s.l}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="ch-dash-grid">
-              <div className="ch-panel">
-                <p className="ch-panel-title">Enrollment Trend</p>
-                <Sparkline />
-              </div>
-
-              <div className="ch-panel ch-panel-insight">
-                <p className="ch-panel-title ch-insight-title">
-                  <span className="ch-spark">✦</span> AI Campus Insight
-                </p>
-                <p className="ch-insight-head">Attendance anomaly detected</p>
-                <p className="ch-insight-body">32 students may require attention.</p>
-                <div className="ch-insight-bar">
-                  <span style={{ width: "68%" }} />
-                </div>
-              </div>
-            </div>
+            <CampusPreview />
           </div>
         </div>
 
@@ -360,43 +339,8 @@ export default function CampusHero() {
   );
 }
 
-/** Static analytics sparkline — pure SVG, no chart dependency. */
-function Sparkline() {
-  const series = [
-    { color: "#2563eb", points: "0,38 28,30 56,33 84,20 112,24 140,12 168,16" },
-    { color: "#06b6d4", points: "0,44 28,40 56,42 84,33 112,36 140,27 168,24" },
-    { color: "#f59e0b", points: "0,49 28,47 56,44 84,46 112,39 140,41 168,34" },
-  ];
-
-  return (
-    <svg viewBox="0 0 168 56" className="ch-spark-svg" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="chFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2563eb" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="#2563eb" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {[14, 28, 42].map((y) => (
-        <line key={y} x1="0" x2="168" y1={y} y2={y} stroke="#e8eef7" strokeWidth="1" />
-      ))}
-      <polygon points="0,38 28,30 56,33 84,20 112,24 140,12 168,16 168,56 0,56" fill="url(#chFill)" />
-      {series.map((s) => (
-        <polyline
-          key={s.color}
-          points={s.points}
-          fill="none"
-          stroke={s.color}
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      ))}
-    </svg>
-  );
-}
-
 const CSS = `
-.ch-wrap{position:relative;height:175vh;background:#F7F9FC}
+.ch-wrap{position:relative;height:200vh;background:#F7F9FC}
 .ch-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
   display:flex;flex-direction:column;align-items:center}
 
@@ -480,79 +424,59 @@ const CSS = `
 
 .ch-actions{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:2rem}
 
-/* ── Glass dashboard ────────────────────────── */
-/* margin-top:auto pushes the panel to the bottom on tall screens, but
-   collapses to zero on short ones — the padding guarantees the CTAs always
-   keep clear air above the dashboard. */
+/* ── Product preview panel ──────────────────── */
 .ch-dash-holder{position:relative;z-index:5;width:100%;
   display:flex;justify-content:center;margin-top:auto;
   padding:clamp(2.25rem,7vh,5rem) 1.5rem 0;perspective:1400px}
 
-.ch-dash{width:min(980px,100%);transform-origin:50% 100%;
+/* A glass bezel wrapped around the live product preview. */
+.ch-dash{width:min(1140px,100%);transform-origin:50% 100%;
   background:linear-gradient(165deg,rgba(255,255,255,.92) 0%,rgba(247,250,255,.82) 100%);
   backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
   border:1px solid rgba(255,255,255,.9);
-  border-radius:20px 20px 0 0;
-  padding:1.15rem 1.35rem 1.5rem;
+  border-radius:20px;
+  padding:10px;
   box-shadow:
     0 -1px 0 rgba(255,255,255,.95) inset,
     0 24px 70px rgba(15,35,80,.20),
     0 6px 22px rgba(15,35,80,.10);
-  position:relative;overflow:hidden}
-/* Subtle specular sheen across the glass */
-.ch-dash::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(112deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 34%);
-  border-radius:inherit}
+  position:relative}
 
-.ch-dash-head{display:flex;align-items:flex-start;justify-content:space-between;
-  gap:1rem;margin-bottom:1.05rem}
-.ch-dash-brand{font-size:.62rem;font-weight:800;letter-spacing:.18em;
-  text-transform:uppercase;color:#8A97AC}
-.ch-dash-title{font-size:1.02rem;font-weight:750;color:#111827;margin-top:.12rem;letter-spacing:-.015em}
-.ch-dash-live{display:inline-flex;align-items:center;gap:.4rem;font-size:.66rem;
-  font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#16A34A;
-  background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.16);
-  border-radius:999px;padding:.28rem .7rem}
-.ch-dot{width:6px;height:6px;border-radius:50%;background:#16A34A;
-  box-shadow:0 0 0 0 rgba(22,163,74,.5);animation:chPulse 2.2s infinite}
-@keyframes chPulse{
-  0%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}
-  70%{box-shadow:0 0 0 7px rgba(22,163,74,0)}
-  100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+/* Compact the preview so the whole panel still clears the fold on laptop
+   heights once the scroll lifts it into view. */
+.ch-dash .screen-wrap{border-radius:12px}
+.ch-dash .screen-inner{min-height:0}
+.ch-dash .screen-bar{padding:.5rem .8rem}
+.ch-dash .m-sidebar{padding:.75rem .6rem}
+.ch-dash .m-item{padding:.3rem .5rem;font-size:.68rem}
+.ch-dash .m-section{padding:.5rem .5rem .12rem}
+.ch-dash .m-brand{padding:.3rem .45rem .6rem}
+.ch-dash .m-content{padding:.95rem}
+.ch-dash .m-analytics{min-height:96px}
 
-.ch-dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.85rem}
-.ch-stat{border-radius:13px;padding:.75rem .85rem;border:1px solid rgba(17,24,39,.055);
-  background:rgba(255,255,255,.72)}
-.ch-stat-v{font-size:1.22rem;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1.15}
-.ch-stat-l{font-size:.63rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
-  color:#8A97AC;margin-top:.22rem}
-.ch-stat-blue{background:linear-gradient(160deg,rgba(37,99,235,.09),rgba(37,99,235,.02))}
-.ch-stat-green{background:linear-gradient(160deg,rgba(22,163,74,.09),rgba(22,163,74,.02))}
-.ch-stat-violet{background:linear-gradient(160deg,rgba(124,106,245,.10),rgba(124,106,245,.02))}
-.ch-stat-amber{background:linear-gradient(160deg,rgba(245,158,11,.11),rgba(245,158,11,.02))}
+/* Short laptop heights: trim the preview so its full height still fits
+   on screen once the scroll lifts it. */
+@media (max-height:780px){
+  .ch-dash{padding:7px}
+  .ch-dash .m-content{padding:.72rem}
+  .ch-dash .m-sidebar{padding:.55rem .5rem}
+  .ch-dash .m-item{padding:.22rem .45rem;font-size:.64rem}
+  .ch-dash .m-section{padding:.38rem .45rem .1rem;font-size:.52rem}
+  .ch-dash .m-cards{gap:.4rem;margin-bottom:.45rem}
+  .ch-dash .m-card{padding:.5rem}
+  .ch-dash .m-card-num{font-size:.92rem}
+  .ch-dash .m-analytics{min-height:72px;margin-top:.45rem}
+  .ch-dash .m-chart-svg{min-height:54px}
+  .ch-dash .m-avatar{padding:.45rem .45rem}
+}
 
-.ch-dash-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:.7rem}
-.ch-panel{border:1px solid rgba(17,24,39,.055);border-radius:13px;
-  background:rgba(255,255,255,.74);padding:.8rem .9rem}
-.ch-panel-title{font-size:.62rem;font-weight:800;letter-spacing:.14em;
-  text-transform:uppercase;color:#8A97AC;margin-bottom:.55rem}
-.ch-spark-svg{width:100%;height:56px;display:block}
-
-.ch-panel-insight{background:linear-gradient(160deg,rgba(124,106,245,.09),rgba(37,99,235,.03));
-  border-color:rgba(124,106,245,.16)}
-.ch-insight-title{color:#7C6AF5;display:flex;align-items:center;gap:.35rem}
-.ch-insight-head{font-size:.84rem;font-weight:700;color:#111827;letter-spacing:-.01em}
-.ch-insight-body{font-size:.75rem;color:#475467;margin-top:.2rem;line-height:1.5}
-.ch-insight-bar{margin-top:.7rem;height:4px;border-radius:99px;background:rgba(17,24,39,.07);overflow:hidden}
-.ch-insight-bar span{display:block;height:100%;border-radius:99px;
-  background:linear-gradient(90deg,#2563EB,#8B5CF6)}
 
 /* ── Responsive ─────────────────────────────── */
 @media (max-width:1100px){
   .ch-nav-links{display:none}
 }
 @media (max-width:860px){
-  .ch-wrap{height:158vh}
+  .ch-wrap{height:185vh}
   .ch-nav{padding:1.1rem 1.15rem 0}
   .ch-brand-sub{display:none}
   .ch-btn-ghost{display:none}
@@ -561,14 +485,9 @@ const CSS = `
   .ch-sub{font-size:.89rem;max-width:430px}
   .ch-actions{margin-top:1.5rem}
   .ch-dash-holder{padding-top:clamp(1.75rem,5vh,3rem)}
-  .ch-dash{border-radius:16px 16px 0 0;padding:.9rem .9rem 1.1rem}
-  .ch-dash-stats{grid-template-columns:repeat(2,1fr);gap:.5rem}
-  .ch-dash-grid{grid-template-columns:1fr;gap:.5rem}
-  .ch-stat-v{font-size:1.05rem}
+  .ch-dash{border-radius:14px;padding:6px}
 }
 @media (max-width:520px){
-  .ch-dash-head{margin-bottom:.8rem}
-  .ch-dash-live{display:none}
 }
 
 @media (prefers-reduced-motion:reduce){
