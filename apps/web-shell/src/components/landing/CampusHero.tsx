@@ -144,31 +144,62 @@ export default function CampusHero() {
         onUpdate: (self: any) => scene.setScroll(self.progress),
       });
 
-      // Hero content and dashboard ride upward with the 3D world, so the
-      // hand-off to the next section reads as one movement.
+      // How far the panel must rise for its whole height to clear the fold.
+      // Measured live (minus any transform already applied) so it stays correct
+      // across viewport sizes, and clamped so the panel never tucks under the nav.
+      const dashLift = () => {
+        const sticky = stickyRef.current;
+        if (!dash || !sticky) return 0;
+        const currentY = Number(gsap.getProperty(dash, "y")) || 0;
+        const d = dash.getBoundingClientRect();
+        const restingTop = d.top - currentY;
+        const hiddenBelowFold = restingTop + d.height - sticky.getBoundingClientRect().bottom;
+        const maxLift = restingTop - 96;
+        return Math.max(0, Math.min(hiddenBelowFold + 28, maxLift));
+      };
+
+      // Three phases across the pinned hero, as one continuous move:
+      //   0.00–0.32  headline clears while the dashboard rises into full view
+      //   0.32–0.55  the whole panel sits on screen
+      //   0.55–0.90  panel and scene exit upward as the next section arrives
       const contentTl = gsap.timeline({
         scrollTrigger: {
           trigger: wrap,
           start: "top top",
-          end: "52% bottom",
+          end: "bottom bottom",
           scrub: reduced ? true : 0.6,
+          invalidateOnRefresh: true,
         },
       });
 
       if (contentRef.current) {
         contentTl.to(
           contentRef.current,
-          { y: -170, opacity: 0, ease: "power1.in" },
+          { y: -190, opacity: 0, ease: "power1.in", duration: 0.32 },
           0
         );
       }
-      if (dashRef.current) {
+      if (dash) {
         contentTl.to(
-          dashRef.current,
-          { y: -230, opacity: 0, scale: 0.95, ease: "power1.in" },
-          0.08
+          dash,
+          { y: () => -dashLift(), ease: "power2.out", duration: 0.32 },
+          0
+        );
+        contentTl.to(
+          dash,
+          {
+            y: () => -dashLift() - 300,
+            opacity: 0,
+            scale: 0.95,
+            ease: "power1.in",
+            duration: 0.35,
+          },
+          0.55
         );
       }
+      // Pad the timeline to a full unit so the positions above map directly
+      // onto scroll fractions of the hero.
+      contentTl.set({}, {}, 1);
 
       killScrollTrigger = () => {
         window.clearTimeout(introGuard);
