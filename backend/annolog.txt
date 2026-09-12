@@ -1,0 +1,5 @@
+--- ANNOUNCEMENTS ---
+Assignment due tomorrow | Guys start preparing | Target: 65e1234567890abcdef12345
+Test | It's a test | Target: 69cb48e8448b1dfec32bc680
+Class cancelled | No class tomorrow. | Target: 69cb48e8448b1dfec32bc680
+Schedule chnage | Class at 11.30 | Target: 69cb48e8448b1dfec32bc680

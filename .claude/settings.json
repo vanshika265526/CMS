@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"authorize\\\\|SUPER_ADMIN\\\\|COLLEGE_ADMIN\\\\|TEACHER\\\\|STUDENT\\\\|PARENT\\\\|LIBRARIAN\")",
+      "Bash(node --version)",
+      "Bash(python --version)",
+      "Bash(ls backend/node_modules/puppeteer)",
+      "Bash(ls backend/node_modules/md-to-pdf)",
+      "Bash(ls backend/node_modules/pdfkit)",
+      "Bash(python -c \"import reportlab; print\\('reportlab', reportlab.Version\\)\")",
+      "Bash(python -c \"import fpdf; print\\('fpdf ok'\\)\")",
+      "Bash(python -c \"import xhtml2pdf; print\\('xhtml2pdf ok'\\)\")",
+      "Bash(python -c \"import weasyprint; print\\('weasyprint ok'\\)\")",
+      "Bash(python -c \"import markdown; print\\('markdown ok'\\)\")",
+      "Bash(python -m pip install fpdf2 --quiet)",
+      "Bash(python -c \"import fpdf; print\\('fpdf2 version', fpdf.__version__\\)\")",
+      "PowerShell(git pull)",
+      "Bash(python generate_features_pdf.py)",
+      "Bash(python -c ' *)",
+      "PowerShell(git fetch)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('express:', \\(p.dependencies||{}\\).express\\); console.log\\('sanitize-html:', \\(p.dependencies||{}\\)['sanitize-html']\\); console.log\\('xss:', \\(p.dependencies||{}\\).xss\\); console.log\\('dompurify:', \\(p.dependencies||{}\\).isomorphic-dompurify || \\(p.dependencies||{}\\)['dompurify']\\);\")",
+      "Bash(node -e \"try{console.log\\(require\\('express/package.json'\\).version\\)}catch\\(e\\){console.log\\('n/a'\\)}\")"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+﻿Connected to MongoDB
+
+--- STUDENTS MISSING batchId (Total: 10) ---
+ID: 69c94f1ae7b1d4d42182dcaa | Name: Aarav | Batch: "2024-2028" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ae7b1d4d42182dcb1 | Name: Priya | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ae7b1d4d42182dcb8 | Name: Rohan | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1be7b1d4d42182dcbf | Name: Sneha | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1be7b1d4d42182dcc4 | Name: Arjun | Batch: "2024-2028" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1be7b1d4d42182dccb | Name: Kavya | Batch: "2024-2026" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ce7b1d4d42182dcd0 | Name: Ishaan | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ce7b1d4d42182dcd5 | Name: Ananya | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ce7b1d4d42182dcda | Name: Kabir | Batch: "2024-2027" | College: 69c858e2a5cf6956f5b821a8
+ID: 69c94f1ce7b1d4d42182dcdf | Name: Diya | Batch: "2024-2026" | College: 69c858e2a5cf6956f5b821a8
+
+--- ALL AVAILABLE BATCHES (Total: 1) ---
+Name: "Batch 2022-26" | ID: 69c858e3a5cf6956f5b821b7 | College: 69c858e2a5cf6956f5b821a8

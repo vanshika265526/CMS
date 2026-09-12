@@ -1,0 +1,195 @@
+﻿{
+  "students": [
+    {
+      "_id": "69cb48ee448b1dfec32bc6d4",
+      "userId": "69cb48ea448b1dfec32bc6a8",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "personalInfo": {
+        "firstName": "Harsh"
+      },
+      "academicInfo": {
+        "batch": "Batch 2022-26"
+      }
+    },
+    {
+      "_id": "69cb48ef448b1dfec32bc6d8",
+      "userId": "69cb48ea448b1dfec32bc6ae",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "personalInfo": {
+        "firstName": "Ananya"
+      },
+      "academicInfo": {
+        "batch": "Batch 2022-26"
+      }
+    },
+    {
+      "_id": "69cb48ef448b1dfec32bc6da",
+      "userId": "69cb48ea448b1dfec32bc6b0",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "personalInfo": {
+        "firstName": "Rohan"
+      },
+      "academicInfo": {
+        "batch": "Batch 2022-26"
+      }
+    },
+    {
+      "_id": "69cb48ef448b1dfec32bc6dc",
+      "userId": "69cb48eb448b1dfec32bc6b2",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "personalInfo": {
+        "firstName": "Sanya"
+      },
+      "academicInfo": {
+        "batch": "Batch 2022-26"
+      }
+    },
+    {
+      "_id": "69cb48ef448b1dfec32bc6de",
+      "userId": "69cb48eb448b1dfec32bc6b4",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "personalInfo": {
+        "firstName": "Ishaan"
+      },
+      "academicInfo": {
+        "batch": "Batch 2022-26"
+      }
+    }
+  ],
+  "batches": [
+    {
+      "_id": "69cb48e8448b1dfec32bc680",
+      "name": "Batch 2022-26",
+      "collegeId": "69cb48e8448b1dfec32bc670"
+    },
+    {
+      "_id": "69cbd669462dc05ed2bce64b",
+      "name": "Batch 2023-2027",
+      "collegeId": "69cb48e8448b1dfec32bc670"
+    }
+  ],
+  "timetables": [
+    {
+      "_id": "69c973ecf06e40fe2776d094",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Monday",
+      "period": 1,
+      "startTime": "09:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973ecf06e40fe2776d095",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Monday",
+      "period": 2,
+      "startTime": "10:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973ecf06e40fe2776d096",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Monday",
+      "period": 3,
+      "startTime": "11:15",
+      "isActive": true
+    },
+    {
+      "_id": "69c973ecf06e40fe2776d097",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Monday",
+      "period": 4,
+      "startTime": "13:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d09a",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Tuesday",
+      "period": 1,
+      "startTime": "09:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d09b",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Tuesday",
+      "period": 2,
+      "startTime": "10:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d09c",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Tuesday",
+      "period": 3,
+      "startTime": "11:15",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d09d",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Tuesday",
+      "period": 4,
+      "startTime": "13:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d0a0",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Wednesday",
+      "period": 1,
+      "startTime": "09:00",
+      "isActive": true
+    },
+    {
+      "_id": "69c973edf06e40fe2776d0a1",
+      "collegeId": "69cb48e8448b1dfec32bc670",
+      "teacherId": "69cb48e9448b1dfec32bc6a0",
+      "batchId": "69cb48e8448b1dfec32bc680",
+      "dayOfWeek": "Wednesday",
+      "period": 2,
+      "startTime": "10:00",
+      "isActive": true
+    }
+  ],
+  "teachers": [
+    {
+      "_id": "69cb48e9448b1dfec32bc6a0",
+      "name": "Prof. Alan Turing",
+      "collegeId": "69cb48e8448b1dfec32bc670"
+    },
+    {
+      "_id": "69cb48e9448b1dfec32bc6a2",
+      "name": "Prof. Grace Hopper",
+      "collegeId": "69cb48e8448b1dfec32bc670"
+    },
+    {
+      "_id": "69cb48e9448b1dfec32bc6a4",
+      "name": "Dr. Richard Feynman",
+      "collegeId": "69cb48e8448b1dfec32bc670"
+    }
+  ]
+}

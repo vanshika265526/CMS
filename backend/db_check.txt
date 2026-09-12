@@ -1,0 +1,12 @@
+STUDENT:
+batchId: 69cb48e8448b1dfec32bc680
+batch string: Batch 2022-26
+
+ANNOUNCEMENTS:
+Schedule chnage -> 65e1234567890abcdef12345
+Class cancelled -> 65e1234567890abcdef12345
+Test -> 65e1234567890abcdef12345
+
+ASSIGNMENTS:
+Notes -> 65e1234567890abcdef12345
+Unit 1 -> 65e1234567890abcdef12345

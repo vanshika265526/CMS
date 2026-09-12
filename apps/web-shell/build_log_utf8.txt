@@ -1,0 +1,207 @@
+﻿
+> web-shell@1.0.0 build
+> next build
+
+Γû▓ Next.js 16.2.1 (Turbopack)
+
+  Creating an optimized production build ...
+node.exe : 
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (:  
+  String) [], RemoteExc   
+ eption
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+> Build error occurred
+Error: Turbopack build 
+failed with 3 errors:
+./src/lib/exportUtils.ts:1
+:1
+Module not found: Can't 
+resolve 'jspdf'
+[31m[1m>[0m [90m1 
+|[0m [36mimport[0m 
+jsPDF [36mfrom[0m 
+[32m"jspdf"[0m;
+  [90m  |[0m [31m[1m^^
+^^^^^^^^^^^^^^^^^^^^^^^^[
+0m
+  [90m2 |[0m 
+[36mimport[0m autoTable 
+[36mfrom[0m [32m"jspdf-
+autotable"[0m;
+  [90m3 |[0m 
+[36mimport[0m * 
+[36mas[0m [33mXLSX[0m 
+[36mfrom[0m 
+[32m"xlsx"[0m;
+  [90m4 |[0m
+
+
+
+Import traces:
+  Client Component 
+Browser:
+    
+./src/lib/exportUtils.ts 
+[Client Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+  Client Component SSR:
+    
+./src/lib/exportUtils.ts 
+[Client Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+https://nextjs.org/docs/me
+ssages/module-not-found
+
+
+./src/lib/exportUtils.ts:2
+:1
+Module not found: Can't 
+resolve 'jspdf-autotable'
+  [90m1 |[0m 
+[36mimport[0m jsPDF 
+[36mfrom[0m 
+[32m"jspdf"[0m;
+[31m[1m>[0m [90m2 
+|[0m [36mimport[0m 
+autoTable [36mfrom[0m [
+32m"jspdf-autotable"[0m;
+  [90m  |[0m [31m[1m^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^[0m
+  [90m3 |[0m 
+[36mimport[0m * 
+[36mas[0m [33mXLSX[0m 
+[36mfrom[0m 
+[32m"xlsx"[0m;
+  [90m4 |[0m
+  [90m5 |[0m /**
+
+
+
+Import traces:
+  Client Component 
+Browser:
+    
+./src/lib/exportUtils.ts 
+[Client Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+  Client Component SSR:
+    
+./src/lib/exportUtils.ts 
+[Client Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+https://nextjs.org/docs/me
+ssages/module-not-found
+
+
+./src/lib/exportUtils.ts:3
+:1
+Module not found: Can't 
+resolve 'xlsx'
+  [90m1 |[0m 
+[36mimport[0m jsPDF 
+[36mfrom[0m 
+[32m"jspdf"[0m;
+  [90m2 |[0m 
+[36mimport[0m autoTable 
+[36mfrom[0m [32m"jspdf-
+autotable"[0m;
+[31m[1m>[0m [90m3 
+|[0m [36mimport[0m * 
+[36mas[0m [33mXLSX[0m 
+[36mfrom[0m 
+[32m"xlsx"[0m;
+  [90m  |[0m [31m[1m^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^[0m
+  [90m4 |[0m
+  [90m5 |[0m /**
+  [90m6 |[0m  * 
+[33mGenerate[0m a 
+comprehensive 
+[33mPDF[0m report 
+[36mfor[0m the 
+currently viewed 
+attendance list.
+
+
+
+Import traces:
+  Client Component 
+Browser:
+    
+./src/lib/exportUtils.ts 
+[Client Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component Browser]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+  Client Component SSR:
+    
+./src/lib/exportUtils.ts 
+[Client Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Client 
+Component SSR]
+    ./src/app/admin/attend
+ance/page.tsx [Server 
+Component]
+
+https://nextjs.org/docs/me
+ssages/module-not-found
+
+
+    at <unknown> (./src/li
+b/exportUtils.ts:1:1)
+    at <unknown> (https://
+nextjs.org/docs/messages/m
+odule-not-found)
+    at <unknown> (./src/li
+b/exportUtils.ts:2:1)
+    at <unknown> (https://
+nextjs.org/docs/messages/m
+odule-not-found)
+    at <unknown> (./src/li
+b/exportUtils.ts:3:1)
+    at <unknown> (https://
+nextjs.org/docs/messages/m
+odule-not-found)

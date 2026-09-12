@@ -1,0 +1,46 @@
+{
+  "anns": [
+    {
+      "_id": "69ca2499b9c90c11eb382364",
+      "senderId": "69c858e3a5cf6956f5b821d8",
+      "targetClass": "65e1234567890abcdef12345",
+      "title": "Schedule chnage",
+      "body": "Class at 11.30",
+      "priority": "Normal",
+      "createdAt": "2026-03-30T07:22:01.205Z",
+      "updatedAt": "2026-03-30T07:22:01.205Z",
+      "__v": 0
+    },
+    {
+      "_id": "69ca9fa316dcc9bfa030d9d4",
+      "senderId": "69c858e3a5cf6956f5b821d8",
+      "targetClass": "65e1234567890abcdef12345",
+      "title": "Class cancelled",
+      "body": "No class tomorrow.",
+      "priority": "Urgent",
+      "createdAt": "2026-03-30T16:06:59.405Z",
+      "updatedAt": "2026-03-30T16:06:59.405Z",
+      "__v": 0
+    },
+    {
+      "_id": "69caa10016dcc9bfa030e134",
+      "senderId": "69c858e3a5cf6956f5b821da",
+      "targetClass": "65e1234567890abcdef12345",
+      "title": "Test",
+      "body": "It's a test",
+      "priority": "Normal",
+      "createdAt": "2026-03-30T16:12:48.582Z",
+      "updatedAt": "2026-03-30T16:12:48.582Z",
+      "__v": 0
+    }
+  ],
+  "student": {
+    "course": "B.Tech Computer Science",
+    "batch": "Batch 2022-26",
+    "department": "69cb48e8448b1dfec32bc674",
+    "status": "active",
+    "semester": 6,
+    "rollNumber": "CS22010",
+    "enrollmentDate": "2026-03-31T04:09:18.815Z"
+  }
+}

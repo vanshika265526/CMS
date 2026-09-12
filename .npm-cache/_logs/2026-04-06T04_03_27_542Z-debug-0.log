@@ -1,0 +1,253 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.6.0
+2 info using node@v24.9.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\cms_new\apps\web-shell\.npmrc
+5 silly config load:file:C:\Users\HP\.npmrc
+6 silly config load:file:C:\Users\HP\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install framer-motion gsap @gsap/react
+8 verbose argv "install" "framer-motion" "gsap" "@gsap/react" "--cache" "d:\\cms_new\\.npm-cache"
+9 verbose logfile logs-max:10 dir:d:\cms_new\.npm-cache\_logs\2026-04-06T04_03_27_542Z-
+10 verbose logfile d:\cms_new\.npm-cache\_logs\2026-04-06T04_03_27_542Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest framer-motion@^11.18.0
+15 silly packumentCache full:https://registry.npmjs.org/framer-motion cache-miss
+16 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+17 http fetch GET 200 https://registry.npmjs.org/npm 11134ms
+18 http fetch GET 200 https://registry.npmjs.org/framer-motion 14140ms (cache miss)
+19 silly packumentCache full:https://registry.npmjs.org/framer-motion set size:undefined disposed:false
+20 silly fetch manifest @emotion/is-prop-valid@*
+21 silly packumentCache full:https://registry.npmjs.org/@emotion%2fis-prop-valid cache-miss
+22 http fetch GET 200 https://registry.npmjs.org/@emotion%2fis-prop-valid 906ms (cache miss)
+23 silly packumentCache full:https://registry.npmjs.org/@emotion%2fis-prop-valid set size:undefined disposed:false
+24 silly fetch manifest react@^19.0.0
+25 silly packumentCache full:https://registry.npmjs.org/react cache-miss
+26 http fetch GET 200 https://registry.npmjs.org/react 8387ms (cache miss)
+27 silly packumentCache full:https://registry.npmjs.org/react set size:undefined disposed:false
+28 silly fetch manifest react-dom@^19.0.0
+29 silly packumentCache full:https://registry.npmjs.org/react-dom cache-miss
+30 http fetch GET 200 https://registry.npmjs.org/react-dom 1666ms (cache miss)
+31 silly packumentCache full:https://registry.npmjs.org/react-dom set size:undefined disposed:false
+32 silly fetch manifest gsap@*
+33 silly packumentCache full:https://registry.npmjs.org/gsap cache-miss
+34 http fetch GET 200 https://registry.npmjs.org/gsap 461ms (cache miss)
+35 silly packumentCache full:https://registry.npmjs.org/gsap set size:undefined disposed:false
+36 silly fetch manifest @gsap/react@*
+37 silly packumentCache full:https://registry.npmjs.org/@gsap%2freact cache-miss
+38 http fetch GET 200 https://registry.npmjs.org/@gsap%2freact 347ms (cache miss)
+39 silly packumentCache full:https://registry.npmjs.org/@gsap%2freact set size:undefined disposed:false
+40 silly placeDep ROOT @gsap/react@2.1.2 OK for: web-shell@1.0.0 want: *
+41 silly placeDep ROOT gsap@3.14.2 OK for: @gsap/react@2.1.2 want: ^3.12.5
+42 silly placeDep ROOT framer-motion@11.18.2 REPLACE for: web-shell@1.0.0 want: ^11.18.0
+43 silly placeDep ROOT gsap@3.14.2 REPLACE for: web-shell@1.0.0 want: *
+44 silly reify moves {}
+45 silly audit bulk request {
+45 silly audit   '@alloc/quick-lru': [ '5.2.0' ],
+45 silly audit   '@babel/runtime': [ '7.29.2' ],
+45 silly audit   '@img/colour': [ '1.1.0' ],
+45 silly audit   '@img/sharp-win32-x64': [ '0.34.5' ],
+45 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+45 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+45 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+45 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+45 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+45 silly audit   '@next/env': [ '16.2.1' ],
+45 silly audit   '@next/swc-darwin-arm64': [ '16.2.1' ],
+45 silly audit   '@next/swc-darwin-x64': [ '16.2.1' ],
+45 silly audit   '@next/swc-linux-arm64-gnu': [ '16.2.1' ],
+45 silly audit   '@next/swc-linux-arm64-musl': [ '16.2.1' ],
+45 silly audit   '@next/swc-linux-x64-gnu': [ '16.2.1' ],
+45 silly audit   '@next/swc-linux-x64-musl': [ '16.2.1' ],
+45 silly audit   '@next/swc-win32-arm64-msvc': [ '16.2.1' ],
+45 silly audit   '@next/swc-win32-x64-msvc': [ '16.2.1' ],
+45 silly audit   '@socket.io/component-emitter': [ '3.1.2' ],
+45 silly audit   '@swc/helpers': [ '0.5.15' ],
+45 silly audit   '@tailwindcss/node': [ '4.2.2' ],
+45 silly audit   '@tailwindcss/oxide': [ '4.2.2' ],
+45 silly audit   '@tailwindcss/oxide-win32-x64-msvc': [ '4.2.2' ],
+45 silly audit   '@tailwindcss/postcss': [ '4.2.2' ],
+45 silly audit   '@types/node': [ '22.19.15' ],
+45 silly audit   '@types/pako': [ '2.0.4' ],
+45 silly audit   '@types/raf': [ '3.4.3' ],
+45 silly audit   '@types/react': [ '19.2.14' ],
+45 silly audit   '@types/react-dom': [ '19.2.3' ],
+45 silly audit   '@types/trusted-types': [ '2.0.7' ],
+45 silly audit   'adler-32': [ '1.3.1' ],
+45 silly audit   asynckit: [ '0.4.0' ],
+45 silly audit   axios: [ '1.14.0' ],
+45 silly audit   'base64-arraybuffer': [ '1.0.2' ],
+45 silly audit   'baseline-browser-mapping': [ '2.10.10' ],
+45 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+45 silly audit   'caniuse-lite': [ '1.0.30001781' ],
+45 silly audit   canvg: [ '3.0.11' ],
+45 silly audit   cfb: [ '1.2.2' ],
+45 silly audit   'client-only': [ '0.0.1' ],
+45 silly audit   clsx: [ '2.1.1' ],
+45 silly audit   codepage: [ '1.15.0' ],
+45 silly audit   'combined-stream': [ '1.0.8' ],
+45 silly audit   'core-js': [ '3.49.0' ],
+45 silly audit   'crc-32': [ '1.2.2' ],
+45 silly audit   'css-line-break': [ '2.1.0' ],
+45 silly audit   csstype: [ '3.2.3' ],
+45 silly audit   'date-fns': [ '4.1.0' ],
+45 silly audit   debug: [ '4.4.3' ],
+45 silly audit   'delayed-stream': [ '1.0.0' ],
+45 silly audit   'detect-libc': [ '2.1.2' ],
+45 silly audit   dompurify: [ '3.3.3' ],
+45 silly audit   'dunder-proto': [ '1.0.1' ],
+45 silly audit   'engine.io-client': [ '6.6.4' ],
+45 silly audit   'engine.io-parser': [ '5.2.3' ],
+45 silly audit   'enhanced-resolve': [ '5.20.1' ],
+45 silly audit   'es-define-property': [ '1.0.1' ],
+45 silly audit   'es-errors': [ '1.3.0' ],
+45 silly audit   'es-object-atoms': [ '1.1.1' ],
+45 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+45 silly audit   'fast-png': [ '6.4.0' ],
+45 silly audit   fflate: [ '0.8.2' ],
+45 silly audit   'follow-redirects': [ '1.15.11' ],
+45 silly audit   'form-data': [ '4.0.5' ],
+45 silly audit   frac: [ '1.1.2' ],
+45 silly audit   'function-bind': [ '1.1.2' ],
+45 silly audit   'get-intrinsic': [ '1.3.0' ],
+45 silly audit   'get-proto': [ '1.0.1' ],
+45 silly audit   gopd: [ '1.2.0' ],
+45 silly audit   'graceful-fs': [ '4.2.11' ],
+45 silly audit   'has-symbols': [ '1.1.0' ],
+45 silly audit   'has-tostringtag': [ '1.0.2' ],
+45 silly audit   hasown: [ '2.0.2' ],
+45 silly audit   html2canvas: [ '1.4.1' ],
+45 silly audit   iobuffer: [ '5.4.0' ],
+45 silly audit   jiti: [ '2.6.1' ],
+45 silly audit   jspdf: [ '4.2.1' ],
+45 silly audit   'jspdf-autotable': [ '5.0.7' ],
+45 silly audit   lightningcss: [ '1.32.0' ],
+45 silly audit   'lightningcss-win32-x64-msvc': [ '1.32.0' ],
+45 silly audit   'lucide-react': [ '0.473.0' ],
+45 silly audit   'magic-string': [ '0.30.21' ],
+45 silly audit   'math-intrinsics': [ '1.1.0' ],
+45 silly audit   'mime-db': [ '1.52.0' ],
+45 silly audit   'mime-types': [ '2.1.35' ],
+45 silly audit   'motion-dom': [ '11.18.1' ],
+45 silly audit   'motion-utils': [ '11.18.1' ],
+45 silly audit   ms: [ '2.1.3' ],
+45 silly audit   nanoid: [ '3.3.11' ],
+45 silly audit   next: [ '16.2.1' ],
+45 silly audit   postcss: [ '8.4.31', '8.5.8' ],
+45 silly audit   pako: [ '2.1.0' ],
+45 silly audit   'performance-now': [ '2.1.0' ],
+45 silly audit   picocolors: [ '1.1.1' ],
+45 silly audit   'proxy-from-env': [ '2.1.0' ],
+45 silly audit   raf: [ '3.4.1' ],
+45 silly audit   react: [ '19.2.4' ],
+45 silly audit   'react-dom': [ '19.2.4' ],
+45 silly audit   'regenerator-runtime': [ '0.13.11' ],
+45 silly audit   rgbcolor: [ '1.0.1' ],
+45 silly audit   scheduler: [ '0.27.0' ],
+45 silly audit   sharp: [ '0.34.5' ],
+45 silly audit   semver: [ '7.7.4' ],
+45 silly audit   'socket.io-client': [ '4.8.3' ],
+45 silly audit   'socket.io-parser': [ '4.2.6' ],
+45 silly audit   'source-map-js': [ '1.2.1' ],
+45 silly audit   ssf: [ '0.11.2' ],
+45 silly audit   'stackblur-canvas': [ '2.7.0' ],
+45 silly audit   'styled-jsx': [ '5.1.6' ],
+45 silly audit   'svg-pathdata': [ '6.0.3' ],
+45 silly audit   'tailwind-merge': [ '2.6.1' ],
+45 silly audit   tailwindcss: [ '4.2.2' ],
+45 silly audit   tapable: [ '2.3.2' ],
+45 silly audit   'text-segmentation': [ '1.0.3' ],
+45 silly audit   tslib: [ '2.8.1' ],
+45 silly audit   'tw-animate-css': [ '1.4.0' ],
+45 silly audit   typescript: [ '5.9.3' ],
+45 silly audit   'undici-types': [ '6.21.0' ],
+45 silly audit   utrie: [ '1.0.2' ],
+45 silly audit   wmf: [ '1.0.2' ],
+45 silly audit   word: [ '0.3.0' ],
+45 silly audit   ws: [ '8.18.3' ],
+45 silly audit   xlsx: [ '0.18.5' ],
+45 silly audit   'xmlhttprequest-ssl': [ '2.1.2' ],
+45 silly audit   zod: [ '3.25.76' ],
+45 silly audit   '@gsap/react': [ '2.1.2' ],
+45 silly audit   'framer-motion': [ '11.18.2' ],
+45 silly audit   gsap: [ '3.14.2' ]
+45 silly audit }
+46 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-win32-arm64-msvc
+47 silly reify mark deleted [
+47 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-win32-arm64-msvc'
+47 silly reify ]
+48 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-linux-x64-musl
+49 silly reify mark deleted [
+49 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-linux-x64-musl'
+49 silly reify ]
+50 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-linux-x64-gnu
+51 silly reify mark deleted [
+51 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-linux-x64-gnu'
+51 silly reify ]
+52 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-linux-arm64-musl
+53 silly reify mark deleted [
+53 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-linux-arm64-musl'
+53 silly reify ]
+54 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-linux-arm64-gnu
+55 silly reify mark deleted [
+55 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-linux-arm64-gnu'
+55 silly reify ]
+56 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-darwin-x64
+57 silly reify mark deleted [ 'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-darwin-x64' ]
+58 verbose reify failed optional dependency D:\cms_new\apps\web-shell\node_modules\@next\swc-darwin-arm64
+59 silly reify mark deleted [
+59 silly reify   'D:\\cms_new\\apps\\web-shell\\node_modules\\@next\\swc-darwin-arm64'
+59 silly reify ]
+60 http cache gsap@https://registry.npmjs.org/gsap/-/gsap-3.14.2.tgz 0ms (cache hit)
+61 http cache @gsap/react@https://registry.npmjs.org/@gsap/react/-/react-2.1.2.tgz 1ms (cache hit)
+62 silly tarball no local data for gsap@https://registry.npmjs.org/gsap/-/gsap-3.14.2.tgz. Extracting by manifest.
+63 silly tarball no local data for @gsap/react@https://registry.npmjs.org/@gsap/react/-/react-2.1.2.tgz. Extracting by manifest.
+64 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 492ms
+65 silly audit report {
+65 silly audit report   xlsx: [
+65 silly audit report     {
+65 silly audit report       id: 1108110,
+65 silly audit report       url: 'https://github.com/advisories/GHSA-4r6h-8v6p-xvw6',
+65 silly audit report       title: 'Prototype Pollution in sheetJS',
+65 silly audit report       severity: 'high',
+65 silly audit report       vulnerable_versions: '<0.19.3',
+65 silly audit report       cwe: [Array],
+65 silly audit report       cvss: [Object]
+65 silly audit report     },
+65 silly audit report     {
+65 silly audit report       id: 1108111,
+65 silly audit report       url: 'https://github.com/advisories/GHSA-5pgg-2g8v-p4x9',
+65 silly audit report       title: 'SheetJS Regular Expression Denial of Service (ReDoS)',
+65 silly audit report       severity: 'high',
+65 silly audit report       vulnerable_versions: '<0.20.2',
+65 silly audit report       cwe: [Array],
+65 silly audit report       cvss: [Object]
+65 silly audit report     }
+65 silly audit report   ]
+65 silly audit report }
+66 silly packumentCache corgi:https://registry.npmjs.org/xlsx cache-miss
+67 http fetch GET 200 https://registry.npmjs.org/@gsap/react/-/react-2.1.2.tgz 534ms (cache miss)
+68 http fetch GET 200 https://registry.npmjs.org/xlsx 238ms (cache miss)
+69 silly packumentCache corgi:https://registry.npmjs.org/xlsx set size:undefined disposed:false
+70 http fetch GET 200 https://registry.npmjs.org/gsap/-/gsap-3.14.2.tgz 23191ms (cache miss)
+71 silly ADD node_modules/gsap
+72 silly ADD node_modules/@gsap/react
+73 silly ADD node_modules/@next/swc-win32-arm64-msvc
+74 silly ADD node_modules/@next/swc-linux-x64-musl
+75 silly ADD node_modules/@next/swc-linux-x64-gnu
+76 silly ADD node_modules/@next/swc-linux-arm64-musl
+77 silly ADD node_modules/@next/swc-linux-arm64-gnu
+78 silly ADD node_modules/@next/swc-darwin-x64
+79 silly ADD node_modules/@next/swc-darwin-arm64
+80 verbose cwd D:\cms_new\apps\web-shell
+81 verbose os Windows_NT 10.0.22631
+82 verbose node v24.9.0
+83 verbose npm  v11.6.0
+84 notice
+84 notice New [33mminor[39m version of npm available! [33m11.6.0[39m -> [34m11.12.1[39m
+84 notice Changelog: [34mhttps://github.com/npm/cli/releases/tag/v11.12.1[39m
+84 notice To update run: [4mnpm install -g npm@11.12.1[24m
+84 notice  { force: true, Symbol(proc-log.meta): true }
+85 verbose exit 0
+86 info ok
