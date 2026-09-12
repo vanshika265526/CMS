@@ -56,6 +56,7 @@ export default function LoginPage() {
 
     let cancelled = false;
     let clear: (() => void) | undefined;
+    let guard = 0;
 
     (async () => {
       const gsapMod = await import("gsap");
@@ -64,7 +65,7 @@ export default function LoginPage() {
       const items = stage.querySelectorAll("[data-stage-item]");
       const reset = () => gsap.set(items, { clearProps: "opacity,transform" });
       clear = reset;
-      gsap.from(items, {
+      const tween = gsap.from(items, {
         y: 26,
         opacity: 0,
         duration: 0.85,
@@ -73,10 +74,21 @@ export default function LoginPage() {
         onComplete: reset,
         onInterrupt: reset,
       });
+
+      // GSAP's ticker sleeps whenever requestAnimationFrame is throttled — a
+      // background tab, or an embedded view. Since the form animates FROM
+      // opacity 0, a sleeping ticker would leave the sign-in card invisible.
+      guard = window.setTimeout(() => {
+        if (tween.progress() < 1) {
+          tween.progress(1);
+          reset();
+        }
+      }, 2500);
     })();
 
     return () => {
       cancelled = true;
+      window.clearTimeout(guard);
       clear?.();
     };
   }, []);
